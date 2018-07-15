@@ -47,7 +47,7 @@ You could do this a million times and this program will never fail or give a wro
 
 See image files for Chrome websudoku.com puzzle page scrape instructions and manual puzzle input instructions.
 
-It is written in C++ and compiles with no warnings in Visual Studio. Since I recompiled it with static linking of needed runtime DLLs, it is a stand-alone exe. 
+It is written in C++ (C++11 library for Marsenne Twister random number generator) and compiles with no warnings in Visual Studio. Since I recompiled it with static linking of needed runtime DLLs, it is a stand-alone exe. 
 
 It can solve the hardest Sudoku puzzles in the world.
 
