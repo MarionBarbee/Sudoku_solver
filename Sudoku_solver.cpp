@@ -151,7 +151,7 @@ int   doonce = 1;
 int   gcbl = 0;
 int   gcnum = 0;
 int   gindex = 1;
-
+bool  gfirstprint = true;;
 int   glerr = 0;
 int   glrow1done = 0;
 int   glcol1done = 0;
@@ -409,7 +409,6 @@ void  writerowunittargrow(int runit, int num);
 void  initemptyboxrowsandcols(int b);
 int   box4cancelbls(int b);
 bool  ranonce = false;
-
 int    getpuzzleandeditmask();
 int    col456(int c, int v);
 int    col123(int c, int v);
@@ -8366,7 +8365,7 @@ void initp(){
 
 		writepuzzle();
 		updp();
-		saveonce = 0;
+		
 	}
 
 	initzcnt = zcnt;
@@ -8439,7 +8438,7 @@ void initp(){
 
 	}
 
-	 
+	if (saveonce == 1){ saveonce = 0; }
 
 	return;
 }
@@ -9152,15 +9151,17 @@ int _tmain(){ //for windows
 		checkfin();
 
 		if ((zcnt < lzcnt) && (zcnt>0) && (!glerr)){ _tmain(); }
-
-		if (zcnt < lzcnt){ break; }
+		if (glerr){ glerr = false; rldinitialpuzzle(); lzcnt = zcnt;  }
+		 
 	}
 
 	if (zcnt>0){
 		time_t hold_time;
 		hold_time = time(NULL);
 		//cout<<"Elapsed time is: " <<hold_time-start_time<<" seconds"<<endl;
-		if (hold_time - start_time > 60){ cout << "Extremely difficult puzzle! Please wait." << endl; }
+		if (hold_time - start_time > 60){
+			if (gfirstprint){ gfirstprint = false; cout << "Extremely difficult puzzle! Please wait." << endl; }
+		}
 		// for linux	 main();}
 		//for windows
 		_tmain();
@@ -9177,7 +9178,7 @@ int _tmain(){ //for windows
 int hardestalgo(){
 	mt19937_64 generator(gseed);  // mt19937 is a standard mersenne_twister_engine
 	checkfin();
-	if (zcnt < lzcnt){
+	if ((zcnt < lzcnt)&&(!glerr)){
 		return 0;       //don't guess anymore
 	}
 	suppressoutput = true;
