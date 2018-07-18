@@ -2,7 +2,7 @@
 Solves all the world's hardest Sudoku puzzles including all from Dr. Arto Inkala, U  of Helsinki (professor of mathematics).
 I recompiled the C++ source code Sudoku_solver.cpp with static linking of run-time libraries in Visual Studio so it is not necessary to have Visual Studio installed to run it.
 
-Note: This proram makes use of two c++11 libraries: 
+Note: This proram makes use of two c++11 libraries, chrono and random:
 
 #include
 <chrono>
@@ -13,15 +13,16 @@ Note: This proram makes use of two c++11 libraries:
 This is done so that the wonderful 64-bit Mersenne twister random number generator mt19937_64 generator(gseed) can be used. The standard C++ rand(seed) is uselessly unrandom.  This is  transparent though since those two libraries are statically linked. Initial seed is derived from the system clock.
 
 To change it to run in a Linux environment requires editing the Sudoku_solver.cpp file and editing 2 lines to change _tmain to main and then recompiling with gcc.
-
+========================================
 It has two modes of operation:
 
 Mode 1: Manual input mode.
 
 Mode 2: websudoku.com page scrape mode.
+=========================================
 
 In mode 1, a puzzle can be manually typed and saved in a file named i.txt which must reside in the same Windows directory in which the program Sudoku_solver.exe is located. Blanks must be represented with zeroes and each number must be separated by a space.
-
+==========================================
 Mode 1 Example 1:
 
 Suppose you want to see if the program can solve a Sudoku puzzle with the theoretical minimum number of clues, which is 17 clues:
@@ -30,7 +31,7 @@ Please note:
 There are 17 clue puzzles which have no valid solution (invalid puzzle). 
 There are 17 clue puzzles which have multiple solutions (invalid puzzle). 
 There are no Sudoku puzzles which have less than 17 clues which only have one unique solution (valid puzzle).
-
+===============================================================================
 Step 1: Download "Sudoku_solver.exe" and "17clues" from this gitHub repository.
 
 Contents of "17 clues":
@@ -45,15 +46,16 @@ Contents of "17 clues":
 0 0 2 0 0 0 0 5 0
 0 4 0 0 0 0 3 0 0
 
+================================
 Step 2: Copy "17clues" to i.txt:
 
 C:\Users\John\Desktop>copy 17clues i.txt
         1 file(s) copied.
- 
+================================ 
 Step 3: Run the program:
 
 C:\Users\John\Desktop>Sudoku_solver.exe
-
+=======================================
 Output:
 
 *****************************************************
@@ -215,13 +217,13 @@ puzzle[1..9][1..9] =
 ++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Mode 1 Example 2:
-
+=================
 Suppose you want to see if the program can solve the world's hardest Sudoku puzzle, created by Dr. Arto Inkala, Professor of Mathematcs, University of Helsinki.
 
- Dr. Inkala told me about this puzzle:  "I ran chi-square regressions non-stop for a month on a spercomputer to create the world's hardest puzzle".
+Dr. Inkala told me about this puzzle:  "I ran chi-square regressions non-stop for a month on a supercomputer to create the world's hardest puzzle".
 
  It does indeed live up to it's name!
-
+====================================================================================
 Step 1: Download "Sudoku_solver.exe" and "worldshardest" from this gitHub repository.
 
 Contents of "worldshardest:
@@ -236,11 +238,12 @@ Contents of "worldshardest:
 0 0 8 5 0 0 0 1 0
 0 9 0 0 0 0 4 0 0
 
+======================================
 Step 2: Copy "worldshardest" to i.txt:
 
 C:\Users\John\Desktop>copy worldshardest i.txt
  1 file(s) copied.
-
+=======================================
 Step 3: Run the program:
 
 C:\Users\John\Desktop>Sudoku_solver.exe
@@ -303,23 +306,40 @@ $$$$$$$$$$$$$    lzcnt           =4
 Elapsed time is: 137 seconds
 
 Congratulations! MANUAL_INPUT  puzzle solved!
+=============================================================
+Note that this puzzle took an incredible 137 seconds to solve!
 
-Note that this puzzle took an incredible 137 seconds to solve. That is the longest run time of any of Arto's "Top 10 hardest" or any other puzzles, proving that Dr. Inkala was right!
+That is the longest run time of any of Arto's "Top 10 hardest" or any other puzzle, proving that Dr. Inkala was right!
 
 The average EVIL level puzzle on websudoku.com takes 0-1 seconds.
 
+======================
+Mode 2 (Chrome only!):
+======================
 
- 
+Mode 2 is a handy way to test many, many puzzles. I created this mode to prove that Sudoku_solver will solve every single one of the 
+
+3,524,523,076 "Easy"-level puzzles on the site.
+
+Every single one of the 4,193,045,015 "Medium"-level puzzles on the site.
+
+Every single one of the 6,024,188,247  "Hard"-level puzzles on the site.
+
+Every single one of the 10,370,837,067  "EVIL"-level puzzles on the site.
+
+By automating the puzzle extraction process down to a few mouse clicks and then hitting <up arrow><enter> to solve the current puzzle displayed on the web page, the doubter of the infallibility of my program can test all 24112593405 puzzles, if so desired.
 
 Type sudoku. It will be the first website. Pick an EASY puzzle.
+
+Select an "Easy" puzzle.
 
 The program will scrape the selected puzzle off the website if you right click  “view frame source” and then right click and save frame source as whatever file Chrome picks. 
 
 When the frame source is saved, it must be saved as “HTML only” instead of “complete web page”.
 
-Once that file is saved to your download directory, close the frame html tab and open a dos command prompt window (I know. The heuristic “human approach” algorithms used up all the juice on “back end”). Path needs to be your download path like C:\users\me\Desktop.Wherever you put solveit.
+Once that file is saved to your download directory, close the frame html tab and open a dos command prompt window (I know. The heuristic “human approach” algorithms used up all the juice on “back end”). Path needs to be your download path.
 
-Type solveit and it will be solved in 0 seconds, most likely. You can type the puzzle into to the web page to check it if you like to see if the answer is right, but it is a waste of time. The program will never display an incorrect answer. It is not possible. A valid Sudoku puzzle has only one correct solution and my program does a check of rows, columns and boxes and they must all add up to 45. Scroll back and you can see the verification checksum.
+Type Sudoku_solver.exe and it will be solved in 0 seconds, most likely. You can type the puzzle into to the web page to check it if you like to see if the answer is right, but it is a waste of time. The program will never display an incorrect answer.  
 
 Pick a medium puzzle.
 
@@ -335,19 +355,24 @@ Probably zero seconds.
 
 Pick a hard puzzle.
 
-Repeat medium steps as above.
+(Repeat medium steps as above).
 
 Probably 0 or maybe 1 second depending on how slow you computer is.
 
-Pick an EVIL puzzle same thing.
+Pick an "EVIL" puzzle and do same steps as above.
 
 You could do this a million times and this program will never fail or give a wrong answer.
 
-See image files for Chrome websudoku.com puzzle page scrape instructions and manual puzzle input instructions.
+Thank you!
 
-It is written in C++ (C++11 library for Marsenne Twister random number generator) and compiles with no warnings in Visual Studio. Since I recompiled it with static linking of needed runtime DLLs, it is a stand-alone exe. 
+Marion Barbee Jr.
 
-It can solve the hardest Sudoku puzzles in the world.
+Highland Village, Texas 75077
 
-A lot of email providers don’t like or allow .EXE files to be sent as mail attachments, so copying it from my  Github is the easiest:
+July 18. 2018
 
+Contact: buddybarbee@yahoo.com
+
+
+
+ 
