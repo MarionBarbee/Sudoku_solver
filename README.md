@@ -1,6 +1,6 @@
 # Sudoku_solver
 Solves all the world's hardest Sudoku puzzles including all from Dr. Arto Inkala, U  of Helsinki (professor of mathematics).
-Instructions for using solveit.exe to solve any Sudoku puzzle in the world very quickly. I recompiled it with static linking of run-time libraries so it is not necessary to have Visual Studio installed to run it.
+Instructions for using solveit.exe to solve any Sudoku puzzle in the world very quickly. I recompiled it with static linking of run-time libraries so it is not necessary to have Visual Studio installed to run it. To change it to run in a Linux environment requires editing the Sudoku_solver.cpp file and editing 2 lines to change _tmain to main and then recompiling with gcc.
 
 It has two modes of operation:
 
@@ -32,15 +32,10 @@ Contents of "17 clues":
 
 Step 2: Copy "17clues" to i.txt:
 
-c:\users\youruser\downloads> copy 17clues i.txt
-
-Step 3: Run the program:
-
-c:\users\youruser\downloads> Sudoku_solver.exe
-
-
 C:\Users\John\Desktop>copy 17clues i.txt
         1 file(s) copied.
+ 
+Step 3: Run the program:
 
 C:\Users\John\Desktop>Sudoku_solver.exe
 
@@ -103,11 +98,15 @@ Elapsed time is: 0 seconds
 
 Congratulations! MANUAL_INPUT  puzzle solved!
 
+#########################################################
 Note that puzzle took 0 seconds to solve this puzzle!!!!!
 
-It is impossible for this program to output a wrong answer for any puzzle with only one solution. This is accomplished by checksumming each row, column and box i the answer output. See above.
 
-Note that 1+2+3+4+5+6+7+8+9 = 45.
+It is impossible for this program to output a wrong answer for any puzzle with only one solution. This is accomplished by checksumming each row, column and box in the answer output. See above. All values will add up to 45 1+2+3+4+5+6+7+8+9 = 45.
+
+If a wrong answer had been calculated,  several rows,columns and boxes would would have oddball summations like 43, 41, 46 etc.
+
+Since only results summing up to 45 are allowed, wrong answers are thusly prohibited.
 
 A Sudoku puzzle contains 9 rows of 9 numbers.  81 numbers total. The puzzle can be viewed as 9 rows of 9, 9 columns of 9, 9 3 x 3 boxes of 9 numbers each, 3 "row units" of 3 horizontal 3 x 3 boxes or 3 "column units" of 3 vertical 3 x 3 boxes or a single 2-dimensional 9 x 9 array of digits 1 through 9.
 
