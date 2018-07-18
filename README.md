@@ -1,17 +1,206 @@
 # Sudoku_solver
 Solves all the world's hardest Sudoku puzzles including all from Dr. Arto Inkala, U  of Helsinki (professor of mathematics).
-Instructions for using solveit.exe to solve any Sudoku puzzle in the world very quickly. I recompiled it with static linking of run-time so it is not necessary to have Visual Studio installed to run it.
+Instructions for using solveit.exe to solve any Sudoku puzzle in the world very quickly. I recompiled it with static linking of run-time libraries so it is not necessary to have Visual Studio installed to run it.
 
-It has two modes of operation. A puzzle can be manually created by saving or typing a puzzle as I.txt filename. A bit tedious, unless one wants to test the program against the hardest in the world.
+It has two modes of operation:
 
-5 0 3 2 0 0 0 0 0  line 1
-…
+Mode 1: Manual input mode.
 
-2 0 0 5 0 0 0 0 3   line 9
+Mode 2: websudoku.com page scrape mode.
 
-save as I.txt  and then type solveit from the same directory.
+In mode 1, a puzzle can be manually typed and saved in a file named i.txt which must reside in the same Windows directory in which the program Sudoku_solver.exe is located. Blanks must be represented with zeroes and each number must be separated by a space.
 
-A much cooler, easier to test the program is to click on puzzles in the websudoku site (must use Chrome). 
+Mode 1 Example 1:
+
+Suppose you want to see if the program can solve a Sudoku puzzle with the theoretical minimum number of clues, which is 17 clues:
+
+Please note: There are 17 clue puzzles which have no valid solution (invalid puzzle). There are also puzzles with 17 clues which have multiple solutions (invalid puzzle). There are no valid Sudoku puzzles which have less than 17 clues.
+
+Step 1: Download "Sudoku_solver.exe" and "17clues" from this gitHub repository.
+
+Contents of "17 clues":
+
+0 0 0 7 0 0 0 0 0
+1 0 0 0 0 0 0 0 0
+0 0 0 4 3 0 2 0 0
+0 0 0 0 0 0 0 0 6
+0 0 0 5 0 9 0 0 0
+0 0 0 0 0 0 4 1 8
+0 0 0 0 8 1 0 0 0
+0 0 2 0 0 0 0 5 0
+0 4 0 0 0 0 3 0 0
+
+Step 2: Copy "17clues" to i.txt:
+
+c:\users\youruser\downloads> copy 17clues i.txt
+
+Step 3: Run the program:
+
+c:\users\youruser\downloads> Sudoku_solver.exe
+
+
+C:\Users\John\Desktop>copy 17clues i.txt
+        1 file(s) copied.
+
+C:\Users\John\Desktop>Sudoku_solver.exe
+
+Output:
+
+*****************************************************
+checksums
+*****************************************************
+*****row checksums *****
+row[1].checksum=45
+row[2].checksum=45
+row[3].checksum=45
+row[4].checksum=45
+row[5].checksum=45
+row[6].checksum=45
+row[7].checksum=45
+row[8].checksum=45
+row[9].checksum=45
+*****col checksums *****
+col[1].checksum=45
+col[2].checksum=45
+col[3].checksum=45
+col[4].checksum=45
+col[5].checksum=45
+col[6].checksum=45
+col[7].checksum=45
+col[8].checksum=45
+col[9].checksum=45
+*****box checksums *****
+box[1].checksum=45
+box[2].checksum=45
+box[3].checksum=45
+box[4].checksum=45
+box[5].checksum=45
+box[6].checksum=45
+box[7].checksum=45
+box[8].checksum=45
+box[9].checksum=45
+
+=====================================================
+$$$$$$$$$$$$$    puzzle bl cnt   =0
+=====================================================
+$$$$$$$$$$$$$    glerr           =0
+$$$$$$$$$$$$$    zcnt            =0
+$$$$$$$$$$$$$    lzcnt           =4
+
+264 715 839
+137 892 645
+598 436 271
+
+423 178 596
+816 549 723
+759 623 418
+
+375 281 964
+982 364 157
+641 957 382
+
+Elapsed time is: 0 seconds
+
+Congratulations! MANUAL_INPUT  puzzle solved!
+
+Note that puzzle took 0 seconds to solve this puzzle!!!!!
+
+
+
+
+
+
+Suppose you want to see if the program can solve the world's hardest Sudoku puzzle, created by Dr. Arto Inkala, Professor of Mathemayics, University of Helsinki. 
+
+Step 1: Download "Sudoku_solver.exe" and "worldshardest" from this gitHub repository.
+
+Contents of "worldshardest:
+
+8 0 0 0 0 0 0 0 0
+0 0 3 6 0 0 0 0 0
+0 7 0 0 9 0 2 0 0
+0 5 0 0 0 7 0 0 0
+0 0 0 0 4 5 7 0 0
+0 0 0 1 0 0 0 3 0
+0 0 1 0 0 0 0 6 8
+0 0 8 5 0 0 0 1 0
+0 9 0 0 0 0 4 0 0
+
+Step 2: Copy "worldshardest" to i.txt:
+
+c:\users\youruser\downloads> copy worldshardest i.txt
+
+Step 3: Run the program:
+
+c:\users\youruser\downloads> Sudoku_solver.exe
+
+Output:
+
+C:\Users\John\Desktop>copy worldshardest i.txt
+        1 file(s) copied.
+
+C:\Users\John\Desktop>Sudoku_solver.exe
+
+*****************************************************
+checksums
+*****************************************************
+*****row checksums *****
+row[1].checksum=45
+row[2].checksum=45
+row[3].checksum=45
+row[4].checksum=45
+row[5].checksum=45
+row[6].checksum=45
+row[7].checksum=45
+row[8].checksum=45
+row[9].checksum=45
+*****col checksums *****
+col[1].checksum=45
+col[2].checksum=45
+col[3].checksum=45
+col[4].checksum=45
+col[5].checksum=45
+col[6].checksum=45
+col[7].checksum=45
+col[8].checksum=45
+col[9].checksum=45
+*****box checksums *****
+box[1].checksum=45
+box[2].checksum=45
+box[3].checksum=45
+box[4].checksum=45
+box[5].checksum=45
+box[6].checksum=45
+box[7].checksum=45
+box[8].checksum=45
+box[9].checksum=45
+
+=====================================================
+$$$$$$$$$$$$$    puzzle bl cnt   =0
+=====================================================
+$$$$$$$$$$$$$    glerr           =0
+$$$$$$$$$$$$$    zcnt            =0
+$$$$$$$$$$$$$    lzcnt           =4
+
+812 753 649
+943 682 175
+675 491 283
+
+154 237 896
+369 845 721
+287 169 534
+
+521 974 368
+438 526 917
+796 318 452
+
+Elapsed time is: 137 seconds
+
+Congratulations! MANUAL_INPUT  puzzle solved!
+
+
+
+ 
 
 Type sudoku. It will be the first website. Pick an EASY puzzle.
 
