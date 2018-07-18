@@ -4,10 +4,13 @@ I recompiled the C++ source code Sudoku_solver.cpp with static linking of run-ti
 
 Note: This proram makes use of two c++11 libraries: 
 
-#include <chrono>
-#include <random>
+#include
+<chrono>
+        
+#include
+<random>
 
-This is done so that the wonderful 64 bit Mersenne twister random number generator mt19937_64 generator(gseed); can be used. The standard C++ rand(seed) is uselessly unrandom.  This is  transparent though since those two libraries are statically linked. Initial seed is derived from the system clock.
+This is done so that the wonderful 64-bit Mersenne twister random number generator mt19937_64 generator(gseed) can be used. The standard C++ rand(seed) is uselessly unrandom.  This is  transparent though since those two libraries are statically linked. Initial seed is derived from the system clock.
 
 To change it to run in a Linux environment requires editing the Sudoku_solver.cpp file and editing 2 lines to change _tmain to main and then recompiling with gcc.
 
@@ -23,7 +26,10 @@ Mode 1 Example 1:
 
 Suppose you want to see if the program can solve a Sudoku puzzle with the theoretical minimum number of clues, which is 17 clues:
 
-Please note: There are 17 clue puzzles which have no valid solution (invalid puzzle). There are also puzzles with 17 clues which have multiple solutions (invalid puzzle). There are no Sudoku puzzles which have less than 17 clues which only have one unique solution (valid puzzle).
+Please note: 
+There are 17 clue puzzles which have no valid solution (invalid puzzle). 
+There are 17 clue puzzles which have multiple solutions (invalid puzzle). 
+There are no Sudoku puzzles which have less than 17 clues which only have one unique solution (valid puzzle).
 
 Step 1: Download "Sudoku_solver.exe" and "17clues" from this gitHub repository.
 
@@ -110,14 +116,16 @@ Congratulations! MANUAL_INPUT  puzzle solved!
 #########################################################
 Note that puzzle took 0 seconds to solve this puzzle!!!!!
 
-
+======================================================================================================================================
 It is impossible for this program to output a wrong answer for any puzzle with only one solution. This is accomplished by checksumming each row, column and box in the answer output. See above. All values will add up to 45: 1+2+3+4+5+6+7+8+9 = 45.
-
-If a wrong answer had been calculated, several rows,columns and boxes would would have oddball summations like 43, 41, 46 etc.
+======================================================================================================================================
+If a wrong answer had been calculated, several rows, columns and boxes would would have oddball summations like 43, 41, 46 etc.
 
 Since only results summing up to 45 are allowed, wrong answers are thusly prohibited.
 
-A Sudoku puzzle contains 9 rows of 9 numbers. 81 numbers total. The puzzle can be viewed as 9 rows of 9:
+A Sudoku puzzle contains 9 rows of 9 numbers. 81 numbers total. The puzzle can be viewed in different ways:
+
+9 rows of 9:
 
 row_type row[rmax];
 
@@ -206,9 +214,13 @@ puzzle[1..9][1..9] =
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++
 
+Mode 1 Example 2:
+
 Suppose you want to see if the program can solve the world's hardest Sudoku puzzle, created by Dr. Arto Inkala, Professor of Mathematcs, University of Helsinki.
 
- Dr. Inkala told me "I ran chi square regressions non-stop for a month to create the world's hardest puzzle". It does indeed live up to it's name!
+ Dr. Inkala told me about this puzzle:  "I ran chi-square regressions non-stop for a month on a spercomputer to create the world's hardest puzzle".
+
+ It does indeed live up to it's name!
 
 Step 1: Download "Sudoku_solver.exe" and "worldshardest" from this gitHub repository.
 
@@ -226,18 +238,14 @@ Contents of "worldshardest:
 
 Step 2: Copy "worldshardest" to i.txt:
 
-c:\users\youruser\downloads> copy worldshardest i.txt
+C:\Users\John\Desktop>copy worldshardest i.txt
+ 1 file(s) copied.
 
 Step 3: Run the program:
 
-c:\users\youruser\downloads> Sudoku_solver.exe
+C:\Users\John\Desktop>Sudoku_solver.exe
 
 Output:
-
-C:\Users\John\Desktop>copy worldshardest i.txt
-        1 file(s) copied.
-
-C:\Users\John\Desktop>Sudoku_solver.exe
 
 *****************************************************
 checksums
@@ -296,6 +304,9 @@ Elapsed time is: 137 seconds
 
 Congratulations! MANUAL_INPUT  puzzle solved!
 
+Note that this puzzle took an incredible 137 seconds to solve. That is the longest run time of any of Arto's "Top 10 hardest" or any other puzzles, proving that Dr. Inkala was right!
+
+The average EVIL level puzzle on websudoku.com takes 0-1 seconds.
 
 
  
