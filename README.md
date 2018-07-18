@@ -1,6 +1,16 @@
 # Sudoku_solver
 Solves all the world's hardest Sudoku puzzles including all from Dr. Arto Inkala, U  of Helsinki (professor of mathematics).
-Instructions for using solveit.exe to solve any Sudoku puzzle in the world very quickly. I recompiled it with static linking of run-time libraries so it is not necessary to have Visual Studio installed to run it. To change it to run in a Linux environment requires editing the Sudoku_solver.cpp file and editing 2 lines to change _tmain to main and then recompiling with gcc.
+I recompiled the C++ source code Sudoku_solver.cpp with static linking of run-time libraries in Visual Studio so it is not necessary to have Visual Studio installed to run it.
+
+Note: This proram makes use of two c++11 libraries: 
+
+#include <chrono>
+#include <random>
+
+This is done so that the wonderful 64 bit Mersenne twister random number generator mt19937_64 generator(gseed); can be used. The standard C++ rand(seed) is uselessly unrandom.  This is  transparent though since those two libraries are statically linked. Initial seed is derived from the system clock.
+
+
+To change it to run in a Linux environment requires editing the Sudoku_solver.cpp file and editing 2 lines to change _tmain to main and then recompiling with gcc.
 
 It has two modes of operation:
 
