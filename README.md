@@ -14,7 +14,7 @@ Mode 1 Example 1:
 
 Suppose you want to see if the program can solve a Sudoku puzzle with the theoretical minimum number of clues, which is 17 clues:
 
-Please note: There are 17 clue puzzles which have no valid solution (invalid puzzle). There are also puzzles with 17 clues which have multiple solutions (invalid puzzle). There are no valid Sudoku puzzles which have less than 17 clues.
+Please note: There are 17 clue puzzles which have no valid solution (invalid puzzle). There are also puzzles with 17 clues which have multiple solutions (invalid puzzle). There are no Sudoku puzzles which have less than 17 clues which only have one unique solution (valid puzzle).
 
 Step 1: Download "Sudoku_solver.exe" and "17clues" from this gitHub repository.
 
@@ -104,6 +104,12 @@ Elapsed time is: 0 seconds
 Congratulations! MANUAL_INPUT  puzzle solved!
 
 Note that puzzle took 0 seconds to solve this puzzle!!!!!
+
+It is impossible for this program to output a wrong answer for any puzzle with only one solution. This is accomplished by checksumming each row, column and box i the answer output. See above.
+
+Note that 1+2+3+4+5+6+7+8+9 = 45.
+
+A Sudoku puzzle contains 9 rows of 9 numbers.  81 numbers total. The puzzle can be viewed as 9 rows of 9, 9 columns of 9, 9 3 x 3 boxes of 9 numbers each, 3 "row units" of 3 horizontal 3 x 3 boxes or 3 "column units" of 3 vertical 3 x 3 boxes or a single 2-dimensional 9 x 9 array of digits 1 through 9.
 
 
 
