@@ -9,7 +9,6 @@ Note: This proram makes use of two c++11 libraries:
 
 This is done so that the wonderful 64 bit Mersenne twister random number generator mt19937_64 generator(gseed); can be used. The standard C++ rand(seed) is uselessly unrandom.  This is  transparent though since those two libraries are statically linked. Initial seed is derived from the system clock.
 
-
 To change it to run in a Linux environment requires editing the Sudoku_solver.cpp file and editing 2 lines to change _tmain to main and then recompiling with gcc.
 
 It has two modes of operation:
@@ -112,20 +111,104 @@ Congratulations! MANUAL_INPUT  puzzle solved!
 Note that puzzle took 0 seconds to solve this puzzle!!!!!
 
 
-It is impossible for this program to output a wrong answer for any puzzle with only one solution. This is accomplished by checksumming each row, column and box in the answer output. See above. All values will add up to 45 1+2+3+4+5+6+7+8+9 = 45.
+It is impossible for this program to output a wrong answer for any puzzle with only one solution. This is accomplished by checksumming each row, column and box in the answer output. See above. All values will add up to 45: 1+2+3+4+5+6+7+8+9 = 45.
 
-If a wrong answer had been calculated,  several rows,columns and boxes would would have oddball summations like 43, 41, 46 etc.
+If a wrong answer had been calculated, several rows,columns and boxes would would have oddball summations like 43, 41, 46 etc.
 
 Since only results summing up to 45 are allowed, wrong answers are thusly prohibited.
 
-A Sudoku puzzle contains 9 rows of 9 numbers.  81 numbers total. The puzzle can be viewed as 9 rows of 9, 9 columns of 9, 9 3 x 3 boxes of 9 numbers each, 3 "row units" of 3 horizontal 3 x 3 boxes or 3 "column units" of 3 vertical 3 x 3 boxes or a single 2-dimensional 9 x 9 array of digits 1 through 9.
+A Sudoku puzzle contains 9 rows of 9 numbers. 81 numbers total. The puzzle can be viewed as 9 rows of 9:
 
+row_type row[rmax];
 
+Example from 17clues input puzzle):
 
+row[1] = 0 0 0 7 0 0 0 0 0
 
+9 columns of 9:
 
+col_type col[cmax];
 
-Suppose you want to see if the program can solve the world's hardest Sudoku puzzle, created by Dr. Arto Inkala, Professor of Mathemayics, University of Helsinki. 
+Example (from 17clues input puzzle):
+
+col[1] =
+0
+1 
+0
+0
+0
+0
+0
+0
+0
+ 
+9 3 x 3 boxes of 9:
+
+box_type box[bmax];
+
+Example (from 17clues input puzzle):
+box[1] = 
+
+0 0 0      
+1 0 0        
+0 0 0       
+ 
+3 "row units" of 3 horizontal 3 x 3 boxes:
+
+row_unit rowunit[rumax];
+
+Example (from 17clues answer output):
+
+row_unit[1] = 
+
+264 715 839
+137 892 645
+598 436 271
+
+3 "column units" of 3 vertical 3 x 3 boxes:
+
+col_unit colunit[cumax];
+
+Example (from 17clues answer output):
+
+col_unit[1] = 
+
+264            
+137           
+598    
+
+423   
+816          
+759         
+
+375            
+982         
+
+Ora single 2-dimensional 9 x 9 array of digits 1 through 9:
+
+int puzzle[rmax][cmax];
+
+Example (from 17clues answer output):
+
+puzzle[1..9][1..9] = 
+
+264 715 839
+137 892 645
+598 436 271
+
+423 178 596
+816 549 723
+759 623 418
+
+375 281 964
+982 364 157
+641 957 382
+
+++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Suppose you want to see if the program can solve the world's hardest Sudoku puzzle, created by Dr. Arto Inkala, Professor of Mathematcs, University of Helsinki.
+
+ Dr. Inkala told me "I ran chi square regressions non-stop for a month to create the world's hardest puzzle". It does indeed live up to it's name!
 
 Step 1: Download "Sudoku_solver.exe" and "worldshardest" from this gitHub repository.
 
