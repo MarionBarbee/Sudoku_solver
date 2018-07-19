@@ -1,54 +1,5 @@
  
-This program tries to never guess a number (a method which always condemns a human solver to certain failure) unless 
-
-there is no known Sudoku trick or technique which could be utilized to get a number at some arbitrary (usually early) 
-
-point in the puzzle. A human will think something like “This spot can be only a 2 or a 9 and I think it is a 9, so I’m going 
-
-to pencil in a 9..”
-
-Let’s suppose that is the only time that the human is less than 100% certain about a square.
-
-What’s the mathematical probability that the human guessed correctly on that one square which indeed could only be a 2 
-
-or a 9 and solved the puzzle correctly?
-
-The maths answer would be “The human has a 50% probability of solving the puzzle correctly”
-
-The “Sudoku reality” answer is “0%. The human has 0% chance of solving the puzzle correctly.
-
-This is the guiding principle of my program. Never guess!!!! 100% determinism!!! Unfortunately, there are puzzles which 
-
-are so difficult that no person in the world could get a number using any trick, without extrapolating N number of moves 
-
-forward in the puzzle solution to get that square. In the world’s hardest puzzles, N can be a dauntingly large number of 
-
-predictions into the future.
-
-For puzzles of such incredible difficulty, my program resorts to extrapolation and future prediction until it gains enough 
-
-traction to quit guessing and then eschews guessing, using only human techniques and tricks until the puzzle is solved.
-
-This program has 40 or 50 different human “master Sudoku expert techniques or tricks converted into c++ 
-
-functions/methods. I don’t even know the actual number.
-
-No other computer program in the world solves Sudoku puzzles in this way. It can solve the majority of the billions of the 
-
-possible “Easy” through “Hard” puzzles without making a single guess about a square. No other Sudoku puzzle solving 
-
-program in the world can make this provable claim.
-
-In a contest running on the same hardware, no other program which “guesses” squares can outperform my program 
-
-solving the huge number of puzzles my program never makes a single guess on. On puzzles that are hard enough to 
-
-require my program to “extrapolate” the way all other programs operate all the time, certain guessing techniques can give 
-
-a theoretically comparable performance. So far, no one has provided a pony to run. I was hoping Peter Norvig was up 
-
-to that challenge.
-
+ 
 # Sudoku_solver
 Solves all the world's hardest Sudoku puzzles including all from Dr. Arto Inkala, U of Helsinki (professor of 
 
