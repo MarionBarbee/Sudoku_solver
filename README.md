@@ -1,4 +1,4 @@
-# Sudoku_solver
+Sudoku_solver
 Solves all the world's hardest Sudoku puzzles including all from Dr. Arto Inkala, U  of Helsinki (professor of mathematics).
 I recompiled the C++ source code Sudoku_solver.cpp with static linking of run-time libraries in Visual Studio so it is not necessary to have Visual Studio installed to run it.
 
@@ -109,7 +109,6 @@ Elapsed time is: 0 seconds
 
 Congratulations! MANUAL_INPUT  puzzle solved!
 
-#########################################################
 Note that puzzle took 0 seconds to solve this puzzle!!!!!
 
 ======================================================================================================================================
