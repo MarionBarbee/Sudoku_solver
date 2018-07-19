@@ -1,4 +1,5 @@
 <!-- prettier-ignore -->
+>
 This program tries to never guess a number (a method which always condemns a human solver to certain failure) unless 
 
 there is no known Sudoku trick or technique which could be utilized to get a number at some arbitrary (usually early) 
@@ -855,5 +856,5 @@ July 18. 2018
 <!-- prettier-ignore-end -->
 Contact: buddybarbee@yahoo.com
 
-
+.
 
