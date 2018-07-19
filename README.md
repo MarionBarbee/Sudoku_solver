@@ -1,21 +1,16 @@
-Sudoku_solver
+ Sudoku_solver
 Solves all the world's hardest Sudoku puzzles including all from Dr. Arto Inkala, U  of Helsinki (professor of mathematics).
 I recompiled the C++ source code Sudoku_solver.cpp with static linking of run-time libraries in Visual Studio so it is not necessary to have Visual Studio installed to run it.
 
 Note: This proram makes use of two c++11 libraries, chrono and random:
 
 This is done so that the wonderful 64-bit Mersenne twister random number generator mt19937_64 generator(gseed) can be used. The standard C++ rand(seed) is uselessly unrandom.  This is  transparent though since those two libraries are statically linked. Initial seed is derived from the system clock.
+To change it to run in a Linux environment requires editing the Sudoku_solver.cpp file and editing 2 lines to change _tmain to main and then recompiling with gcc
 
-To change it to run in a Linux environment requires editing the Sudoku_solver.cpp file and editing 2 lines to change _tmain to main and then recompiling with gcc.
 ========================================
 It has two modes of operation:
 
 Mode 1: Manual input mode.
-
-Mode 2: websudoku.com page scrape mode.
-=========================================
-
-In mode 1, a puzzle can be manually typed and saved in a file named i.txt which must reside in the same Windows directory in which the program Sudoku_solver.exe is located. Blanks must be represented with zeroes and each number must be separated by a space.
 ==========================================
 Mode 1 Example 1:
 
@@ -363,6 +358,13 @@ Marion Barbee Jr.
 Highland Village, Texas 75077
 
 July 18. 2018
+
+Contact: buddybarbee@yahoo.com
+
+
+
+ 
+
 
 Contact: buddybarbee@yahoo.com
 
