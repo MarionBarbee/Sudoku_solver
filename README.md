@@ -52,10 +52,9 @@ C:\Users\John\Desktop>Sudoku_solver.exe
 
 Output:
 
-*****************************************************
+
 checksums
-*****************************************************
-*****row checksums *****
+row checksums 
 row[1].checksum=45
 row[2].checksum=45
 row[3].checksum=45
@@ -65,7 +64,7 @@ row[6].checksum=45
 row[7].checksum=45
 row[8].checksum=45
 row[9].checksum=45
-*****col checksums *****
+col checksums 
 col[1].checksum=45
 col[2].checksum=45
 col[3].checksum=45
@@ -75,7 +74,7 @@ col[6].checksum=45
 col[7].checksum=45
 col[8].checksum=45
 col[9].checksum=45
-*****box checksums *****
+box checksums 
 box[1].checksum=45
 box[2].checksum=45
 box[3].checksum=45
@@ -87,11 +86,11 @@ box[8].checksum=45
 box[9].checksum=45
 
 
-                 puzzle bl cnt   =0
+                 puzzle bl cnt   0
 
-                 glerr           =0
-                 zcnt            =0
-                 lzcnt           =4
+                 glerr           0
+                 zcnt            0
+                 lzcnt           4
 
 264 715 839
 137 892 645
