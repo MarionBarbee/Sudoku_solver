@@ -7,11 +7,10 @@ Note: This proram makes use of two c++11 libraries, chrono and random:
 
 This is done so that the wonderful 64-bit Mersenne twister random number generator mt19937_64 generator(gseed) can be used. The standard C++ rand(seed) is uselessly unrandom.  This is  transparent though since those two libraries are statically linked. Initial seed is derived from the system clock.
 To change it to run in a Linux environment requires editing the Sudoku_solver.cpp file and editing 2 lines to change _tmain to main and then recompiling with gcc
-
-========================================
+==========================================
 It has two modes of operation:
 
-Mode 1: Manual input mode.
+//Mode 1: Manual input mode.
 ==========================================
 Mode 1 Example 1:
 
