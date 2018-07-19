@@ -243,7 +243,7 @@ C:\Users\John\Desktop>Sudoku_solver.exe
 Output:
 
 
-*****row checksums *****
+ row checksums  
 row[1].checksum=45
 row[2].checksum=45
 row[3].checksum=45
@@ -253,7 +253,7 @@ row[6].checksum=45
 row[7].checksum=45
 row[8].checksum=45
 row[9].checksum=45
-*****col checksums *****
+col checksums 
 col[1].checksum=45
 col[2].checksum=45
 col[3].checksum=45
@@ -296,7 +296,7 @@ box[9].checksum=45
 Elapsed time is: 137 seconds
 
 Congratulations! MANUAL_INPUT  puzzle solved!
----------------------------------------------------------------
+
 
 Note that this puzzle took an incredible 137 seconds to solve!
 
@@ -304,9 +304,9 @@ That is the longest run time of any of Arto's "Top 10 hardest" or any other puzz
 
 The average EVIL level puzzle on websudoku.com takes 0-1 seconds.
 
-----------------------
+-
 Mode 2 (Chrome only!):
-----------------------
+
 
 Mode 2 is a handy way to test many, many puzzles. I created this mode to prove that Sudoku_solver will solve every single one of the 
 
