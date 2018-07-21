@@ -5,14 +5,15 @@
 //==========================================================  
 //   
 //
-//              
+// 
+//
 //        
 //   version: 1.0 r1                                      
 //
 //   
 //
 //   Designed and executed by:  Marion Barbee Jr.
-//   Completed:                July 5, 2018
+//   Completed:  July 15, 2018
 //  
 //   Description: This program will solve any Sudoku puzzle of any degree of difficulty, including puzzles at the "solvability with unique solution"
 //   theoretical limit of 17 clues as well as the top 10 hardest puzzles in the world (see AI sudoku site).
@@ -117,7 +118,7 @@ using namespace std;
 //==========================================================  
 // constants
 //==========================================================  
-
+int const noerr = 0;
 int  const rmax = 10;
 int  const cmax = 10;
 int  const zboxsize = 4;
@@ -139,22 +140,118 @@ int  const exhausted = 15;
 int  const zfirst = 1;
 int  const zsecond = 2;
 int  const zthird = 3;
+//================================
+int initzcnt = 0;
+int writenotallowedcnt = 0;
+bool firsttried = false;
+bool secondtried = false;
+bool thirdtried = false;
+int ilistactivecnt = 0;
+
+bool suppressoutput = false;
+int insertedcnt = 0;
+bool alltried = false;
+int initialactivecnt = 0;
+struct candtabletype {
+	int i;
+	int r;
+	int c;
+	int v;
+};
+
+
+candtabletype c1e[82], c2e[82], c3e[82];
+candtabletype c1w[82], c2w[82], c3w[82];
+
+int const zcol1 = 4;
+int const zcol2 = 5;
+int const zcol3 = 6;
+
+
+int const zinitial = 1;
+int const znoerrors = 0;
+int const zunknownerror = 15;
+int const zlocal = 0;
+
+
+int oldc1eptr, oldc2eptr, oldc3eptr;
+int oldc1wptr, oldc2wptr, oldc3wptr;
+
+int c1eptr = 0; int c2eptr = 0; int c3eptr = 0;
+int c1wptr = 0; int c2wptr = 0; int c3wptr = 0;
+
+int lastswapped = 0;
 
 //==========================================================  
 // puzzle input file name
 //==========================================================  
 fstream file("input");
 //==========================================================  
-// non local variables  (extrapolation functionality)
 //========================================================== 
+string puzzletype = "none";       //default from websudoku site.
+int fnc = 0;
+
+  
+//int const successfulinsert = 0;
+int  const  inrow = 1;
+int  const  incol = 2;
+int  const  inbox = 3;
+int  const  gerr = 4;
+int  const  badr = 5;
+int  const  badc = 6;
+int  const  badv = 7;
+int  const  overwrite = 8;
+int  const  started = 1;
+int  const  zinrow = 1;
+int  const  zincol = 2;
+int  const  zinbox = 3;
+
+
+//=========================
+//global variables
+//=========================
+int mrow[10];
+int mcol[10];
+int mbox[10];
+//=========================
+int blrow[10];
+int blcol[10];
+int blbox[10];
+
+bool allmrownumsexhausted = false;
+bool allmcolnumsexhausted = false;
+bool allmboxnumsexhausted = false;
+
+int currentrowi = 1;
+int currentcoli = 1;
+int currentboxi = 1;
+int rowfailcnt = 0;
+int colfailcnt = 0;
+int boxfailcnt = 0;
+int insnotallowedcnt = 0;
+int rowtupletriedcnt = 0;
+int coltupletriedcnt = 0;
+int boxtupletriedcnt = 0;
+int etype = zrow;
+int writerowcnt = 0;
+int savei = 1;
+int exhaustedcnt = 0;
+int lastreloadmark = 0;
+int const reloadlimit = 9;
+//==========================
+
 int   doonce = 1;
 int   gcbl = 0;
 int   gcnum = 0;
+time_t gelapsedtime = 0;
 int   gindex = 1;
-bool  gfirstprint = true;;
+bool  gfirstprint = true;
 int   glerr = 0;
 int   glrow1done = 0;
 int   glcol1done = 0;
+time_t gltime1 = 0;
+time_t gltime2 = 0;
+
 int   gntargcol = 0;
 uint_fast64_t  gseed;
 int   gthirdpasstargcol = 0;
@@ -168,7 +265,6 @@ int   gtargnum = 0;
 int   gtargrow = 0;
 int   lzcnt = 0;
 int   loopcntr = 4;
-int   puzzle[rmax][cmax];
 bool  pdone = false;
 int   errorcode = 0;
 
@@ -179,7 +275,7 @@ string glastwrite = " ";
 int   gcluecnt = 0;
 int   gstartzcnt = 0;
 int   gtotalerrs = 0;
-int   errcnt = 0; 
+int   errcnt = 0;
 const int  idle = 0;
 time_t start_time = time(NULL);
 
@@ -190,7 +286,33 @@ int  saveonce = 1;
 int glstate = idle;
 //========================================================== 
 //data type structs  
-//==========================================================   
+//==========================================================  
+
+struct extype{
+	int errcnt;
+	int cnum;
+	int cbl;
+	int cindex;
+	int firstbl;
+	int lastbl;
+	int fn;
+	int lastnum;
+	int mcnt;
+	int num[10];
+	int bcnt;
+	int bl[10];
+	int exhausted;
+	int done;
+	int saverow;
+	int oldmcnt;
+	int state;
+	bool error;
+	int rldcnt;
+};
+extype xrow[10];
+extype xcol[10];
+extype xbox[10];
+
 struct row_type{
 	int  errcnt;
 	int  col[cmax];
@@ -281,18 +403,10 @@ struct box_type{
 box_type box[10];
 
 
-struct extrapolate_type{
-	bool active;
-	int  val;
-	int  pos;
-};
-extrapolate_type extrapolate[10];
-extrapolate_type extrapolatecol[10];
-extrapolate_type extrapolatebox[10];
-bool gextrapolatestarted = false;
-int successcnt = 0;
-int initnotallowedcnt = 0;
-int notallowedcnt = 0;
+
+int   puzzle[rmax][cmax];
+int spuzzle[rmax][cmax];
+int ipuzzle[rmax][cmax];
 //==========================================================  
 //==========================================================
 //function forward declarations
@@ -390,7 +504,7 @@ void  rldpuzzle(int etype, int i);
 int   row3elim(int r);
 int   row5elim(int r);
 void  saveinitialpuzzle();
-void  savepuzzle(int etype, int i);
+ 
 void  updp();
 void  writeblposbox(int b);
 void  writeblposcol(int c);
@@ -421,134 +535,12 @@ int    newalgorithm(int r, int v);
 void  procpuzzle();
 //========================================================== 
 int checkinsert(int r, int c, int v);
-
-void initrowtuples(int r);
-void initcoltuples(int c);
-void initboxtuples(int b);
-
-int chkerr(int guessrow);
-
+ 
 void initp();
 void checkfin();
 void procp();
 
-
-//global===========================================
-
-//=============================== 
-
-
-string puzzletype = "none";       //default from websudoku site.
-
-struct tupletype{
-
-	bool tuple[10][10];
-
-};
-tupletype rowtuple[10];
-tupletype coltuple[10];
-tupletype boxtuple[10];
-
-
-
-
-int const errlimit = 2;
-int const maxedout = 255;
-
-
-
-
-int fnc = 0;
-int lastrld = 0;
-int lastr = 0;
-int lastc = 0;
-int lastv = 0;
-
-
-int rldcnt[10];
-//=======================================================
-
-//=========================
-// globals
-//=========================
-//global constants
-//=========================
-int const insertnotallowed = 255;
-
-int const successfulinsert = 0;
-int  const  noerr = 0;
-int  const  inrow = 1;
-int  const  incol = 2;
-int  const  inbox = 3;
-int  const  gerr = 4;
-int  const  badr = 5;
-int  const  badc = 6;
-int  const  badv = 7;
-int  const  overwrite = 8;
-int  const  started = 1;
-int  const  zinrow = 1;
-int  const  zincol = 2;
-int  const  zinbox = 3;
-
-//========================= 
-//global structs
-//=========================
-struct extype{
-	int errcnt;
-	int cnum;
-	int cbl;
-	int cindex;
-	int firstbl;
-	int lastbl;
-	int fn;
-	int lastnum;
-	int mcnt;
-	int num[10];
-	int bcnt;
-	int bl[10];
-	int exhausted;
-	int done;
-	int saverow;
-	int oldmcnt;
-	int state;
-	bool error;
-	int rldcnt;
-};
-extype xrow[10];
-extype xcol[10];
-extype xbox[10];
-//=========================
-//global variables
-//=========================
-int mrow[10];
-int mcol[10];
-int mbox[10];
-//=========================
-int blrow[10];
-int blcol[10];
-int blbox[10];
-
-bool allmrownumsexhausted = false;
-bool allmcolnumsexhausted = false;
-bool allmboxnumsexhausted = false;
-
-int currentrowi = 1;
-int currentcoli = 1;
-int currentboxi = 1;
-int rowfailcnt = 0;
-int colfailcnt = 0;
-int boxfailcnt = 0;
-int insnotallowedcnt = 0;
-int rowtupletriedcnt = 0;
-int coltupletriedcnt = 0;
-int boxtupletriedcnt = 0;
-int etype = zrow;
-int writerowcnt = 0;
-int savei = 1;
-int exhaustedcnt = 0;
-int lastreloadmark = 0;
-int const reloadlimit = 9;
-//==========================
+ 
 int   gm(int etype, int i);
 int   gbls(int etype, int i);
 void  initex(int etype, int i);
@@ -562,76 +554,35 @@ bool checkallcolsexhausted();
 bool checkallboxsexhausted();
 
 int gnxt(int etype, int x, int cnum);
- 
+
 int first(int etype, int x);
 int last(int etype, int x);
 
 
- 
+
 int  checkcnt(int etype, int i);
 
 int checkcnts();
 int checkunits();
 int findi(int i, int &etype);
- int gnt(int i, int cbl, int cnum, int &ncbl, int &ncnum);
- 
+int gnt(int i, int cbl, int cnum, int &ncbl, int &ncnum);
+
 void finishrow(int i);
 int lowrow();
 void initrow(int i);
 void initcol(int i);
 void initbox(int i);
- 
+
 //============================================================
 //class candidate_objects
 // public:
-  
+
 bool checkinserts();
- 
+
 int insnext();
- 
-//================================
-int initzcnt = 0;
-int writenotallowedcnt = 0;
-bool firsttried = false;
-bool secondtried = false;
-bool thirdtried = false;
-int ilistactivecnt = 0;
- 
-bool suppressoutput = false;
-int insertedcnt = 0;
-bool alltried = false;
-int initialactivecnt = 0;
-struct candtabletype {
-	int i;
-	int r;
-	int c;
-	int v;
-};
 
 
-candtabletype c1e[82], c2e[82], c3e[82];
-candtabletype c1w[82], c2w[82], c3w[82];
-
-int const zcol1 = 4;
-int const zcol2 = 5;
-int const zcol3 = 6;
-
-
-int const zinitial = 1;
-int const znoerrors = 0;
-int const zunknownerror = 15;
-int const zlocal = 0;
-
-
-int oldc1eptr, oldc2eptr, oldc3eptr;
-int oldc1wptr, oldc2wptr, oldc3wptr;
-
-int c1eptr = 0; int c2eptr = 0; int c3eptr = 0;
-int c1wptr = 0; int c2wptr = 0; int c3wptr = 0;
-
-int lastswapped = 0;
-  
- //==========================================================
+//==========================================================
 void readpuzzle(){
 	//==========================================================
 
@@ -647,6 +598,7 @@ void readpuzzle(){
 			if (num == 0){ ++zcnt; }
 			row[x].col[y] = num;
 			col[y].row[x] = num;
+			box[x].hash[y] = num;
 			row[x].loc[num] = y;
 			col[y].loc[num] = x;
 		}
@@ -668,8 +620,14 @@ void writepuzzle(){
 	zcnt = 0;
 	for (int x = 1; x <= rmax - 1; ++x) {
 		for (int y = 1; y <= cmax - 1; ++y){
-			file << puzzle[x][y] << " ";
+			file <<puzzle[x][y] << " ";
 			int num = puzzle[x][y];
+			row[x].col[y] = num;
+			col[y].row[x] = num;
+			box[x].hash[y] = num;
+			row[x].loc[num] = y;
+			col[y].loc[num] = x;
+			 
 			if (num == 0){ ++zcnt; }
 
 		}
@@ -677,6 +635,7 @@ void writepuzzle(){
 	}
 	file << endl;
 	file.close();
+	
 	return;
 }
 //==========================================================
@@ -722,7 +681,7 @@ void printpuzzle(){
 
 	//  	  }  	
 	//  }  
-	 
+
 
 	//   time_t hold_time;
 	//   hold_time=time(NULL);
@@ -779,11 +738,11 @@ void updp(){
 		init_box(b);
 		readbox(b);
 	}
-	 	  
+
 	writepuzzle();
 	readpuzzle();
 	readboxes();
-	 
+
 
 	// cout<<endl<<"Puzzle updated*****************"<<endl;
 
@@ -821,7 +780,7 @@ void writencrowunit(int runit){
 			}
 		}
 	}
- 	
+
 	if (rowunit[runit].bcnt == 0){ rowunit[runit].udone = true; }
 
 	return;
@@ -1216,7 +1175,7 @@ void procrowunit(int runit){
 //==========================================================    	
 void  proccolunit(int cunit){
 	//==========================================================   
-	readpuzzle();
+	//readpuzzle();
 	readboxes();
 
 	int r1, r2, r3, res1, res2, res3;
@@ -1735,7 +1694,7 @@ int insert_m(int inwhat, int where){
 	//==========================================================
 	//cout<<"in function insert_m"<<endl;   
 	//     if (where==0){cout <<"where = 0 line 2219"<<endl;return 1;}
-	readpuzzle();
+	//readpuzzle();
 	int m = 0;
 	int const zunit = 3;
 	//     int r,c,u,num;
@@ -1813,7 +1772,7 @@ int insert_m(int inwhat, int where){
 //==========================================================                                                                       
 void checksumall(){
 	//==========================================================
-	readpuzzle();
+//	readpuzzle();
 	int checksum = 0;
 	int res = 0;
 	int localerr = 0;
@@ -1881,11 +1840,18 @@ void checksumall(){
 	cout << endl;
 	time_t hold_time;
 	hold_time = time(NULL);
-	//   //cout<<endl<<"The date is: "<<ctime(&hold_time)<<endl;
-	cout << "Elapsed time is: " << hold_time - start_time << " seconds" << endl;
+	//cout<<endl<<"The date is: "<<ctime(&hold_time)<<endl;
+	time_t elapsedtime = hold_time - start_time;
 
-
-
+	
+	if (elapsedtime>2){
+		cout << "Elapsed time is: " << elapsedtime << " seconds" << endl;
+	}
+	else{
+		gltime2 = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+		gelapsedtime = gltime2 - gltime1;
+		cout << "elapsed time= " << gelapsedtime << " milliseconds" << endl;
+	}
 	if (zcnt == 0){
 		if (glerr == 0){
 
@@ -1924,18 +1890,7 @@ void checksumall(){
 
 	remove("i.txt");
 	remove("saveinitialpuzzle.txt");
-	remove("zrow0.txt");
-	remove("zrow1.txt");
-	remove("zrow2.txt");
-	remove("zrow3.txt");
-	remove("zrow4.txt");
-	remove("zrow5.txt");
-	remove("zrow6.txt");
-	remove("zrow7.txt");
-	remove("zrow8.txt");
-	remove("zrow9.txt");
-
-
+	 
 
 	//  printilist(0);
 	return;
@@ -2336,102 +2291,29 @@ int gallmincol(int c, int &m1, int &m2, int &m3, int &m4, int &m5, int &m6, int 
 //end function gallmincol                                                                 
 
 
-//==========================================================
-void rldpuzzle(int etype, int i){
-	//==========================================================
-	//cout<<"GLERR="<<glerr<<endl;
-
-	successcnt = 0;
-	lastr = 0; lastc = 0; lastv = 0;
-	glerr = false;
-	//savei=1;
-	glerr = false;
-
-	//i=ilist[saveclistptr].r;
-	errcnt++;
-	if (errcnt>8){ errcnt = 0; rldinitialpuzzle(); return; }
-	if (xrow[i].rldcnt >= 2){ xrow[i].rldcnt = 0; errcnt = 0; rldinitialpuzzle(); return; }
-
-	//etype=zrow;i=0;
-	//cout<<"RESTORING PUZZLE"<<" etype="<<etype<<"puzzle="<<i<<endl;
-
-
-	file.close();
-	ifstream file;
-	switch (etype){
-	case 0:file.open("zrow0.txt"); break;
-	case zrow:
-		xrow[i].rldcnt++;
-		switch (i){
-		case 0:    file.open("zrow0.txt");  break;
-		case 1:    file.open("zrow1.txt");  break;
-		case 2:    file.open("zrow2.txt");  break;
-		case 3:    file.open("zrow3.txt");  break;
-		case 4:    file.open("zrow4.txt");  break;
-		case 5:    file.open("zrow5.txt");  break;
-		case 6:    file.open("zrow6.txt");  break;
-		case 7:    file.open("zrow7.txt");  break;
-		case 8:    file.open("zrow8.txt");  break;
-		case 9:    file.open("zrow9.txt");  break;
-			break;
-		}
-		break;
-	}
-
-	int num = 0;
-	zcnt = 0;
-	for (int x = 1; x <= rmax - 1; ++x) {
-		for (int y = 1; y <= cmax - 1; ++y){
-			file >> puzzle[x][y];
-			num = puzzle[x][y];
-			row[x].col[y] = num;
-			col[y].row[x] = num;
-			row[x].loc[num] = y;
-			col[y].loc[num] = x;
-			if (num == 0){ zcnt++; }
-		}
-	}
-	file.close();
-	//cout<<"puzzle type "<<etype<<"puzzle number "<<i<<" RELOADED"<<endl;  
-	writepuzzle();
-	updp();
-	readboxes();
-	lzcnt = zcnt;
-
-	return;
-}
-//==========================================================
-//end rldpuzzle
-//==========================================================   
+ 
 //==========================================================
 void rldinitialpuzzle(){
 	//==========================================================
-	 
+
 	glerr = false;
 	gtotalerrs = 0;
 	errcnt = 0;
-	successcnt = 0;
-	lastr = 0; lastc = 0; lastv = 0;
-	errorcode = 0;
-	for (int i = 0; i <= 9; i++){
-		xrow[i].rldcnt = 0; xcol[i].rldcnt = 0; xbox[i].rldcnt = 0; xrow[i].error = false; xcol[i].error = false; xbox[i].error = false;
-	}
+	 
+	
 	allmrownumsexhausted = false;
 	allmcolnumsexhausted = false;
 	allmboxnumsexhausted = false;
 
-	 
+
 
 
 	glastwrite = "0";
-	file.close();
-	ifstream file;
-	file.open("saveinitialpuzzle.txt");
 	int num = 0;
 	zcnt = 0;
 	for (int x = 1; x <= rmax - 1; ++x) {
 		for (int y = 1; y <= cmax - 1; ++y){
-			file >> puzzle[x][y];
+			puzzle[x][y] = spuzzle[x][y];
 			num = puzzle[x][y];
 			row[x].col[y] = num;
 			col[y].row[x] = num;
@@ -2439,10 +2321,11 @@ void rldinitialpuzzle(){
 			col[y].loc[num] = x;
 			if (num == 0){ zcnt++; }
 		}
-		//  file>>endl;
+		 
 	}
-	//    file>>endl;
-	file.close();
+	 
+
+	 
 	writepuzzle();
 	readpuzzle();
 	updp();
@@ -2456,7 +2339,7 @@ void rldinitialpuzzle(){
 	colunit[3].udone = false;
 	pdone = false;
 	for (int i = 1; i <= 9; i++){ row[i].done = false; col[i].done = false; box[i].done = false; }
-	 
+
 
 
 	return;
@@ -2466,59 +2349,7 @@ void rldinitialpuzzle(){
 //==========================================================   
 
 //==========================================================
-void savepuzzle(int etype, int i){
-	//==========================================================
-
-	file.close();
-	ofstream file;
-
-	switch (etype){
-	case 0:file.open("zrow0.txt"); break;
-	case zrow:
-		switch (i){
-		case 0:    file.open("zrow0.txt");  break;
-		case 1:    file.open("zrow1.txt");  break;
-		case 2:    file.open("zrow2.txt");  break;
-		case 3:    file.open("zrow3.txt");  break;
-		case 4:    file.open("zrow4.txt");  break;
-		case 5:    file.open("zrow5.txt");  break;
-		case 6:    file.open("zrow6.txt");  break;
-		case 7:    file.open("zrow7.txt");  break;
-		case 8:    file.open("zrow8.txt");  break;
-		case 9:    file.open("zrow9.txt");  break;
-			break;
-		}
-		break;
-	}
-
-
-	zcnt = 0;
-	int num = 0;
-	for (int x = 1; x <= rmax - 1; ++x) {
-		for (int y = 1; y <= cmax - 1; ++y){
-			file << puzzle[x][y] << " ";
-			num = puzzle[x][y];
-			if (num == 0){ zcnt++; }
-			row[x].col[y] = num;
-			col[y].row[x] = num;
-			row[x].loc[num] = y;
-			col[y].loc[num] = x;
-		}
-		file << endl;
-	}
-	file << endl;
-	file.close();
-	writepuzzle();
-
-	//cout<<"puzzle type "<<etype<<"puzzle number "<<i<<" SAVED"<<endl;  
-	updp();
-	readboxes();
-
-	return;
-}
-//==========================================================
-//end savepuzzle
-//==========================================================   
+ //==========================================================   
 //==========================================================   
 //==========================================================
 
@@ -2527,23 +2358,24 @@ void saveinitialpuzzle(){
 
 	//cout<<"SAVING INITIAL PUZZLE"<<endl;
 
-	printpuzzle();
-	file.close();
-	ofstream file;
-	file.open("saveinitialpuzzle.txt");
-	zcnt = 0;
+	//printpuzzle();
+//	file.close();
+//	ofstream file;
+//	file.open("saveinitialpuzzle.txt");
+//	zcnt = 0;
 	for (int x = 1; x <= rmax - 1; ++x) {
 		for (int y = 1; y <= cmax - 1; ++y){
-			file << puzzle[x][y] << " ";
-			int num = puzzle[x][y];
-			if (num == 0){ zcnt++; }
+			spuzzle[x][y] = puzzle[x][y]; // << " ";
+		//	int num = puzzle[x][y];
+		//	if (num == 0){ zcnt++; }
 		}
-		file << endl;
+	//	file << endl;
 	}
-	file << endl;
-	file.close();
-	writepuzzle();
-	updp();
+	//file << endl;
+//	file.close();
+	//writepuzzle();
+//	readpuzzle();
+	//updp();
 
 	return;
 }
@@ -2556,7 +2388,7 @@ void saveinitialpuzzle(){
 int eliminateinbox(int b){
 	//==========================================================
 	//  //cout<<"in function eliminateinbox"<<endl;
-	readpuzzle();
+//	readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	int result = 0;
@@ -2685,7 +2517,7 @@ int gallblsinbox(int b, int &b1, int &b2, int &b3, int &b4, int &b5, int &b6, in
 int box3elimcol(int b){
 	//==========================================================
 
-	readpuzzle();
+//	readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	if (box[b].bcnt != 3){ return 0; }
@@ -2789,7 +2621,7 @@ int box3elimcol(int b){
 int box3elimrow(int b){
 	//==========================================================
 
-	readpuzzle();
+	//readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	if (box[b].bcnt != 3){ return 1; }
@@ -2894,7 +2726,7 @@ int box3elimrow(int b){
 int box2elimrow(int b){
 	//==========================================================
 	////cout<<"in function box2elimrow: box="<<b<<endl;              
-	readpuzzle();
+	//readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	if (box[b].bcnt != 2){
@@ -3019,7 +2851,7 @@ int gallblsincol(int c, int &b1, int &b2, int &b3, int &b4, int &b5, int &b6, in
 //==========================================================    
 int moreboxprocing(int b){
 	//==========================================================
-	readpuzzle();
+//	readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	if (box[b].done == true){ box[b].bcnt = 0; return 1; }
@@ -3105,7 +2937,7 @@ int moreboxprocing(int b){
 int box5elim(int b){
 	//==========================================================
 	//  //cout <<"in function box5elim b="<<b<<endl;
-	readpuzzle();
+	//readpuzzle();
 
 	box[b].bcnt = 0;
 	readbox(b);
@@ -3395,7 +3227,7 @@ int box5elim(int b){
 int row5elim(int r){
 	//==========================================================
 	//  //cout <<"in function row5elim r="<<r<<endl;
-	readpuzzle();
+	//readpuzzle();
 	int result = 0;
 	int m1 = 0; int m2 = 0; int m3 = 0; int m4 = 0; int m5 = 0; int m6 = 0; int m7 = 0; int m8 = 0; int m9 = 0;
 	int b1 = 0; int b2 = 0; int b3 = 0; int b4 = 0; int b5 = 0; int b6 = 0; int b7 = 0; int b8 = 0; int b9 = 0;
@@ -3626,7 +3458,7 @@ int gallblsinrow(int r, int &b1, int &b2, int &b3, int &b4, int &b5, int &b6, in
 int col5elim(int c){
 	//==========================================================
 	//  //cout <<"in function col5elim c="<<c<<endl;
-	readpuzzle();
+	//readpuzzle();
 	int result = 0;
 	int m1 = 0; int m2 = 0; int m3 = 0; int m4 = 0; int m5 = 0; int m6 = 0; int m7 = 0; int m8 = 0; int m9 = 0;
 	int b1 = 0; int b2 = 0; int b3 = 0; int b4 = 0; int b5 = 0; int b6 = 0; int b7 = 0; int b8 = 0; int b9 = 0;
@@ -3796,7 +3628,7 @@ int col5elim(int c){
 int box3elim(int b){
 	//==========================================================
 	////cout <<"in box3elim"<<endl;
-	readpuzzle();
+	//readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	int result = 0;
@@ -3869,7 +3701,7 @@ int box3elim(int b){
 int row3elim(int r){
 	//==========================================================
 	////cout <<"in row3elim"<<endl;
-	readpuzzle();
+	//readpuzzle();
 	int res = 0;
 
 	int result = 0;
@@ -3942,7 +3774,7 @@ int row3elim(int r){
 int col3elim(int c){
 	//==========================================================
 	////cout <<"in col3elim"<<endl;
-	readpuzzle();
+	//readpuzzle();
 
 	int res = 0;
 	int result = 0;
@@ -4144,8 +3976,8 @@ int heavylogic(){
 	int foundinb1 = 0; int foundinb2 = 0; int foundinb3 = 0; int foundinb4 = 0; int foundinb5 = 0;
 	int resultcountm1 = 0; int resultcountm2 = 0; int resultcountm3 = 0; int resultcountm4 = 0; int resultcountm5 = 0;
 	if (zcnt == 0){ checksumall(); printpuzzle(); exit(0); }
-	 
-	readpuzzle();
+
+//	readpuzzle();
 	readboxes();
 	for (int runit = 1; runit <= 3; ++runit){
 		int targrownum1 = 0; int targboxnum1 = 0;
@@ -4419,7 +4251,7 @@ int heavylogic(){
 int boxrow3done4(int b){
 	//==========================================================
 	////cout<<"in function boxrow3done4"<<b<<endl;
-	readpuzzle();
+	//readpuzzle();
 	if (box[b].done == true){ return 0; }
 	if (box[b].bcnt == 0){ box[b].done = true; }
 	box[b].bcnt = 0;
@@ -4560,7 +4392,7 @@ int boxrow3done4(int b){
 int boxrow3done3(int b){
 	//==========================================================
 	////cout<<"in function boxrow3done3"<<b<<endl;
-	readpuzzle();
+	//readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	bool m1elimb1 = false; bool m1elimb2 = false; bool m1elimb3 = false;
@@ -4654,7 +4486,7 @@ int boxrow3done3(int b){
 int boxcol3done4(int b){
 	//==========================================================
 	////cout<<"in function boxcol3done4"<<endl;
-	readpuzzle();
+//	readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	bool m1elimb1 = false; bool m1elimb2 = false; bool m1elimb3 = false; bool m1elimb4 = false;
@@ -4791,7 +4623,7 @@ int boxcol3done4(int b){
 int box2elimcol(int b){
 	//==========================================================
 	//   //cout<<"in function box2elimcol box="<<b<<endl;
-	readpuzzle();
+//	readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	int result = 0;
@@ -4908,7 +4740,7 @@ int colelimboxc2done(int b){
 //==========================================================
 int boxelimc2done(int b){
 	//==========================================================
-	readpuzzle();
+//	readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	init_box(b);
@@ -5230,7 +5062,7 @@ int boxelimc2done(int b){
 //==========================================================
 int boxelimr2done(int b){
 	//==========================================================
-	readpuzzle();
+//	readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	init_box(b);
@@ -5549,7 +5381,7 @@ int boxelimr2done(int b){
 //==========================================================
 int boxelimr1done(int b){
 	//==========================================================
-	readpuzzle();
+	//readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	init_box(b);
@@ -5869,7 +5701,7 @@ int boxelimr1done(int b){
 //==========================================================
 int boxelimr3done(int b){
 	//==========================================================
-	readpuzzle();
+//	readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	init_box(b);
@@ -6190,7 +6022,7 @@ int boxelimr3done(int b){
 //==========================================================
 int boxelimc1done(int b){
 	//==========================================================
-	readpuzzle();
+//	readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	init_box(b);
@@ -6515,7 +6347,7 @@ int boxelimc1done(int b){
 //==========================================================
 int boxelimc3done(int b){
 	//==========================================================
-	readpuzzle();
+//	readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	init_box(b);
@@ -6650,7 +6482,7 @@ int boxelimc3done(int b){
 				//got everything  finish...
 				glastwrite = "6816         "; result =
 
-				inspuzzle(targrow, targcol, m1);
+					inspuzzle(targrow, targcol, m1);
 
 				return result;
 			}
@@ -6842,7 +6674,7 @@ int boxsubtract2c3(int b){
 	//==========================================================
 	////cout<<"in function boxsubtract2c3 box="<<b<<endl;
 	int result = 0;
-	readpuzzle();
+//	readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	init_box(b);
@@ -6940,7 +6772,7 @@ int boxsubtract2c2(int b){
 	//==========================================================
 	////cout<<"in function boxsubtract2c2 box="<<b<<endl;
 	int result = 0;
-	readpuzzle();
+//	readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	init_box(b);
@@ -7041,7 +6873,7 @@ int boxsubtract2c1(int b){
 	//==========================================================
 	////cout<<"in function boxsubtract2c1 box="<<b<<endl;
 	int result = 0;
-	readpuzzle();
+//	readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	init_box(b);
@@ -7142,7 +6974,7 @@ int boxsubtract2r1(int b){
 	//==========================================================
 	////cout<<"in function boxsubtract2r1 box="<<b<<endl;
 	int result = 0;
-	readpuzzle();
+//	readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	init_box(b);
@@ -7236,7 +7068,7 @@ int boxsubtract2r2(int b){
 	//==========================================================
 	////cout<<"in function boxsubtract2r2 box="<<b<<endl;
 	int result = 0;
-	readpuzzle();
+	//readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	init_box(b);
@@ -7331,7 +7163,7 @@ int boxsubtract2r3(int b){
 	//==========================================================
 	////cout<<"in function boxsubtract2r3 box="<<b<<endl;
 	int result = 0;
-	readpuzzle();
+	//readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	init_box(b);
@@ -7429,7 +7261,7 @@ int boxsubtract2r3(int b){
 //==========================================================
 int rowelimdouble(int r){
 	//==========================================================
-	readpuzzle();
+	//readpuzzle();
 	int result = 0;
 	////cout<<"in function rowelimdouble row="<<r<<endl;
 	int m1 = 0; int m2 = 0; int m3 = 0;
@@ -7467,7 +7299,7 @@ int rowelimdouble(int r){
 //==========================================================
 int rowelimtriple(int r){
 	//==========================================================
-	readpuzzle();
+	//readpuzzle();
 	int result = 0;
 	////cout<<"in function rowelimtriple row="<<r<<endl;
 	int m1 = 0; int m2 = 0; int m3 = 0; int m4 = 0; int m5 = 0; int m6 = 0; int m7 = 0; int m8 = 0; int m9 = 0;
@@ -7597,7 +7429,7 @@ int procallnumbersrow(int r){
 
 	////cout<<"in function procallnumbersrow row="<<r<<endl;  
 
-	readpuzzle();
+	//readpuzzle();
 	if (row[r].done == true){ return 0; }
 	readboxes();
 
@@ -7685,7 +7517,7 @@ int procallnumberscol(int c){
 
 	////cout<<"in function procallnumberscol col="<<c<<endl;  
 
-	readpuzzle();
+	//readpuzzle();
 	if (col[c].done == true){ return 0; }
 	readboxes();
 
@@ -7769,7 +7601,7 @@ int procallnumbersbox(int b){
 
 	////cout<<"in function procallnumbersbox box="<<b<<endl;  
 
-	readpuzzle();
+	//readpuzzle();
 	//if (box[b].done==true){//cout<<"box COMPLETE FUNCTION procALLNUMBERSBOX  BOX="<<b<<endl; return 0;}   
 
 
@@ -7873,8 +7705,8 @@ int c3bl(int b){
 	//   //cout<<"in function c3bl box="<<b<<endl;
 	if ((box[b].bcnt == 0) || (box[b].done)){ return 0; }
 	for (int i = 1; i <= 9; ++i){ box[b].hash[i] = 0; }
-	writepuzzle();
-	readpuzzle();
+	//writepuzzle();
+	//readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 	int result = 0;
@@ -7929,8 +7761,8 @@ int c1bl(int b){
 	//  //cout<<"in function c1bl box="<<b<<endl;
 	if ((box[b].bcnt == 0) || (box[b].done)){ return 0; }
 	for (int i = 1; i <= 9; ++i){ box[b].hash[i] = 0; }
-	writepuzzle();
-	readpuzzle();
+	//writepuzzle();
+	//readpuzzle();
 	box[b].bcnt = 0;
 	readbox(b);
 
@@ -8149,10 +7981,10 @@ void procpuzzle(){
 	//==========================================================    
 	////cout<<endl<<"in function proc puzzle="<<endl;  
 	int res = 0;
-	 
+
 	lzcnt = zcnt;
-	readpuzzle();
-	writepuzzle();
+//	readpuzzle();
+//	writepuzzle();
 	updp();
 	readboxes();
 	checkfin();
@@ -8242,7 +8074,7 @@ void procpuzzle(){
 		fnc = 28; res = rowelimtriple(i); if (res>0){ res = 0; continue; }
 		else{ if (glerr){ break; } }
 
-		 
+
 		res = 0;
 		checkfin();
 		mcnt = gm(zcol, i);
@@ -8265,7 +8097,7 @@ void procpuzzle(){
 		fnc = 31; res = c3bl(i); if (res>0){ res = 0; continue; }
 		else{ if (glerr){ break; } }
 
-		 
+
 		res = 0;
 		checkfin();
 		mcnt = gm(zbox, i);
@@ -8328,18 +8160,18 @@ void procpuzzle(){
 		else{ if (glerr){ break; } }
 
 
-		 
+
 
 		if (i == 9){ break; }
 	}
-	 
+
 
 	checkfin();
 	if (glerr){ return; }
 	checkcnts();
 	if (glerr){ return; }
 
-	 
+
 
 	return;
 }
@@ -8360,12 +8192,12 @@ void initp(){
 		procpuzzle();
 
 		saveinitialpuzzle();
-	 
-		 
+
+
 
 		writepuzzle();
 		updp();
-		
+
 	}
 
 	initzcnt = zcnt;
@@ -8442,7 +8274,7 @@ void initp(){
 
 	return;
 }
-	 
+
 //=========================================================
 void checkfin(){
 	if (zcnt == 0){ checksumall(); exit(0); }
@@ -8473,7 +8305,7 @@ int  gm(int etype, int i){
 			   if (xrow[i].mcnt>0){
 				   xrow[i].fn = xrow[i].num[1];
 				   xrow[i].lastnum = xrow[i].num[xrow[i].mcnt];
-				               
+
 			   }
 			   else{ xrow[i].fn = 0; xrow[i].lastnum = 0; }
 
@@ -8488,7 +8320,7 @@ int  gm(int etype, int i){
 			   if (xcol[i].mcnt>0){
 				   xcol[i].fn = xcol[i].num[1];
 				   xcol[i].lastnum = mcol[xcol[i].mcnt];
-				             
+
 			   }
 			   else{ xcol[i].fn = 0; xcol[i].lastnum = 0; }
 			   return xcol[i].mcnt;
@@ -8502,7 +8334,7 @@ int  gm(int etype, int i){
 			   if (xbox[i].mcnt>0){
 				   xbox[i].fn = mbox[1];
 				   xbox[i].lastnum = mbox[xbox[i].mcnt];
-				            
+
 			   }
 			   else{ xbox[i].fn = 0; xbox[i].lastnum = 0; }
 			   return xbox[i].mcnt;
@@ -8677,7 +8509,7 @@ int gnxt(int etype, int x, int cnum){
 	int mcnt;
 	if (etype>zbox){ return 0; }
 	if ((x<1) || (x>9)){ exit(0); }
-	 
+
 	if (cnum == 9){ return 0; }
 	switch (etype){
 	case zrow: mcnt = gm(zrow, x); if (mcnt == 0){ finishrow(x); return 1; }break;
@@ -8691,7 +8523,7 @@ int gnxt(int etype, int x, int cnum){
 
 	case zrow:
 		if (cnum == 0){ return mrow[1]; break; }
-		 
+
 		for (int i = 1; i <= mcnt; i++){
 			if (mrow[i]>cnum){ return mrow[i]; break; }
 		}
@@ -8800,7 +8632,7 @@ int inspuzzle(int r, int c, int v){
 	int res = 0;
 	checkfin();
 	if (glerr){ errcnt++; writenotallowedcnt++; return 0; }
-	 
+
 
 	//========debug tool========================================	
 	//==========================================================
@@ -8820,20 +8652,20 @@ int inspuzzle(int r, int c, int v){
 	// err conditions
 	//========================================================== 
 	suppressoutput = true;
-	 
+
 	errorcode = checkinsert(r, c, v);
-	 
+
 	suppressoutput = false;
 	if (errorcode>0){
 		glerr = true; res = 0; errcnt++; xrow[r].errcnt++;
-		 
-		 
-		writenotallowedcnt++;
-		if (xrow[r].errcnt > 10){ xrow[r].errcnt = 0; rldinitialpuzzle(); }  
 
- 
+
+		writenotallowedcnt++;
+		if (xrow[r].errcnt > 10){ xrow[r].errcnt = 0; rldinitialpuzzle(); }
+
+
 		insnotallowedcnt++;
- 
+
 		//cout<<"insert not allowed for (r,c,v)=("<<r<<c<<v<<")"<<endl;
 		switch (errorcode){
 		case noerr:break;
@@ -8847,8 +8679,8 @@ int inspuzzle(int r, int c, int v){
 		case  overwrite://cout<<"error = attempted overwrite"<<endl;      break;
 			break;
 		}
-		lastr = 0; lastc = 0; lastv = 0; savei = 0;
-	 
+		 
+
 
 	}
 	else{
@@ -8863,7 +8695,7 @@ int inspuzzle(int r, int c, int v){
 
 			puzzle[r][c] = v;
 
-		 
+
 
 			errorcode = 0;
 
@@ -8880,14 +8712,14 @@ int inspuzzle(int r, int c, int v){
 	return res;
 }
 //==========================================================
-  
+
 //============================================================
 int checkinsert(int r, int c, int v){
 	//============================================================
 	int  const  noerr = 0;
 
 	errorcode = noerr;
-	readpuzzle();
+	//readpuzzle();
 	readboxes();
 	if (glerr){ errorcode = gerr; }
 	if (puzzle[r][c] == v){ return noerr; }
@@ -8946,7 +8778,7 @@ bool checkallrowsexhausted(){
 	if (allmrownumsexhausted){
 		for (int i = 1; i <= 9; i++){
 			initex(zrow, i);
-			
+
 		}
 		allmrownumsexhausted = false;
 
@@ -9003,7 +8835,7 @@ int  checkcnt(int etype, int i){
 }
 //===================================== 
 //end checkcnt  
- 
+
 //===================================
 int checkcnts(){
 	//===================================
@@ -9075,7 +8907,7 @@ int findi(int i, int &etype){
 //=================================
 //=====================================   
 
- 
+
 //==============================================
 //int main(){  for linux
 //==============================================
@@ -9093,20 +8925,21 @@ int _tmain(){ //for windows
 	if (!ranonce){ getpuzzleandeditmask(); ranonce = true; }
 
 	readpuzzle();
-	updp();  
+	updp();
 	if (saveonce){
 		initp(); if (glerr){
 			cout << "error " << endl;
 			exit(0);
 		}
+		gltime1 = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 	}
 	//==================================
 	//non guessing loop
 	//==================================
 
-	 
+
 	while (true){
-		readpuzzle();
+	//	readpuzzle();
 		readboxes();
 		lzcnt = zcnt;
 		checkfin();
@@ -9119,7 +8952,7 @@ int _tmain(){ //for windows
 		checkcnts();
 		checkfin();
 		if (glerr){ break; }
-	//	cout << "zcnt= " << zcnt << " lzcnt= " << lzcnt << endl;
+		//	cout << "zcnt= " << zcnt << " lzcnt= " << lzcnt << endl;
 		if (zcnt >= lzcnt){ break; }
 	}
 	//========================
@@ -9132,36 +8965,38 @@ int _tmain(){ //for windows
 	// each time we go thru the guessing loop, save a copy of the puzzle that may be different
 	// than saveinitialpuzzle, but before any additional guessing has taken place
 
- 
+
 	//recursive call to main to avoid guessing if progress is still being made
 
 	// for linux if ((zcnt<lzcnt)&&(zcnt>0)&&(!glerr)){main();}
 	// for windows
-	gseed = std::chrono::system_clock::now().time_since_epoch().count();
+gseed = std::chrono::system_clock::now().time_since_epoch().count();
+//	gseed = gltime1;
 	if ((zcnt < lzcnt) && (zcnt>0) && (!glerr)){ _tmain(); }
 	checkfin();
 
 	while (true){
 
 		checkfin();
-		 
+
 		res = hardestalgo();
 
+	 
 
 		checkfin();
 
 		if ((zcnt < lzcnt) && (zcnt>0) && (!glerr)){ _tmain(); }
-		if (glerr){ glerr = false; rldinitialpuzzle(); lzcnt = zcnt;  }
-		 
+		if (glerr){ glerr = false; rldinitialpuzzle(); lzcnt = zcnt; }
+
 	}
 
 	if (zcnt>0){
 		time_t hold_time;
 		hold_time = time(NULL);
 		//cout<<"Elapsed time is: " <<hold_time-start_time<<" seconds"<<endl;
-		if (hold_time - start_time > 60){
-			if (gfirstprint){ gfirstprint = false; cout << "Extremely difficult puzzle! Please wait." << endl; }
-		}
+		//if (hold_time - start_time > 60){
+		//	if (gfirstprint){ gfirstprint = false; cout << "Extremely difficult puzzle! Please wait." << endl; }
+		//}
 		// for linux	 main();}
 		//for windows
 		_tmain();
@@ -9176,20 +9011,20 @@ int _tmain(){ //for windows
 //=====================
 
 int hardestalgo(){
-	mt19937_64 generator(gseed);  // mt19937 is a standard mersenne_twister_engine
+	mt19937_64 generator(gseed);  // mt19937_64 is a standard 64 bit mersenne_twister_engine
 	checkfin();
-	if ((zcnt < lzcnt)&&(!glerr)){
+	if ((zcnt < lzcnt) && (!glerr)){
 		return 0;       //don't guess anymore
 	}
 	suppressoutput = true;
 	int mcnt = gm(zrow, gindex);
 
 	if (glerr){
-		 
+
 		rldinitialpuzzle();
 		gindex = generator() % 9 + 1;
 		mcnt = gm(zrow, gindex);
-		 
+
 	}
 	checkfin();
 	if (zcnt < lzcnt){
@@ -9199,12 +9034,12 @@ int hardestalgo(){
 
 	if (mcnt == 0){
 		row[gindex].done = true;
-	//	cout << "row[" << gindex << "].done=true" << endl;
+		//	cout << "row[" << gindex << "].done=true" << endl;
 		while (true){
 			gindex = generator() % 9 + 1;
 			if (row[gindex].done == false){ break; }
 		}
-//		cout << "new row=" << gindex << endl;
+		//		cout << "new row=" << gindex << endl;
 		mcnt = gm(zrow, gindex);
 		lzcnt++;
 		return 0;
@@ -9215,12 +9050,12 @@ int hardestalgo(){
 	while (true){
 
 		if (glerr){
-			 rldinitialpuzzle();
+			rldinitialpuzzle();
 			while (true){
 				gindex = generator() % 9 + 1;
 				if (row[gindex].done == false){ break; }
 			}
-		//	cout << "new row=" << gindex << endl;
+			//	cout << "new row=" << gindex << endl;
 
 			mcnt = gm(zrow, gindex);
 		}
@@ -9231,7 +9066,7 @@ int hardestalgo(){
 		checkfin();
 
 		if (mcnt == 0){
-			 
+
 			lzcnt++;
 			return 0;
 
@@ -9255,7 +9090,7 @@ int hardestalgo(){
 		rand2 = generator() % mcnt + 1;
 
 
-	 
+
 
 		int col = blrow[rand1];
 
@@ -9271,17 +9106,17 @@ int hardestalgo(){
 			int inbox = finbox(tbox, value);
 			int res = 0;
 			if ((inrow == 0) && (incol == 0) && (inbox == 0) && (!glerr)){   //looks clean, go ahead and insert;
-			 
-				res = inspuzzle(gindex, col, value);				 
+
+				res = inspuzzle(gindex, col, value);
 			}
 			checkfin();
 			if (res > 0){
-				 
+
 				lzcnt++;    //to prevent guessing
 				return 0;
-			}		 
+			}
 
-			if (res == 0){ glerr = false; } 		
+			if (res == 0){ glerr = false; }
 		}
 
 		//if rand index was already occupied, ignore and continue;
@@ -9312,7 +9147,7 @@ void initrow(int i){
 //=============================
 //end initbox
 //=============================
- 
+
 //=============================
 //end writecol
 //=============================
@@ -9328,7 +9163,7 @@ void initcol(int i){
 //=============================
 //end initcol
 //=============================
- 
+
 //=============================
 void initbox(int i){
 	//=============================
@@ -9405,8 +9240,8 @@ int lowrow(){
 //================
 //end lowrow
 //================    
- 
- 
+
+
 //===================================================
 //==========================================================    	
 int  col456(int c, int v){
@@ -9419,7 +9254,7 @@ int  col456(int c, int v){
 	////cout<<"in col456 "<<"c="<<c<<" v="<<v<<endl;
 	//writepuzzle();
 	fnc = 1000;
-	readpuzzle();
+	//readpuzzle();
 	readboxes();
 
 	int result = 0;
@@ -9794,7 +9629,7 @@ int  col123(int c, int v){
 	////cout<<"in col123 "<<"c="<<c<<" v="<<v<<endl;
 	//writepuzzle();
 	fnc = 1001;
-	readpuzzle();
+	//readpuzzle();
 	readboxes();
 
 	int result = 0;
@@ -10165,7 +10000,7 @@ int  col789(int c, int v){
 	////cout<<"in col789 "<<"c="<<c<<" v="<<v<<endl;
 	//writepuzzle();
 	fnc = 1002;
-	readpuzzle();
+	//readpuzzle();
 	readboxes();
 
 	int result = 0;
@@ -11203,7 +11038,7 @@ int getpuzzleandeditmask()
 
 	writepuzzle();
 	saveinitialpuzzle();
-	rldinitialpuzzle();
+    rldinitialpuzzle();
 	return 0;
 }
 //==========================================================
@@ -11212,10 +11047,18 @@ int getpuzzleandeditmask()
 // Author Marion Barbee                                                                
 // Completed July 15, 2018                                                                      
 //                                                                                     
-//##########################################################                           
+//##########################################################     
+
+
+
+
+ 
+ 
 
 
 
 
 
+
+ 
 
