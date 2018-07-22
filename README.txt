@@ -256,9 +256,7 @@ back and exclaimed, “I am astounded!”
 
 In subsequent correspondence, Dr. Inkala told me of this puzzle: "I ran chi-square regressions non-stop for a month on a 
 
-supercomputer to create the world's hardest puzzle".
-
-It does indeed live up to it's name!
+supercomputer to create the world's hardest puzzle
 ================================================================================
 
 ====
@@ -341,15 +339,15 @@ $$$$$$$$$$$$$ lzcnt =4
 438 526 917
 796 318 452
 
-Elapsed time is: 137 seconds
+Elapsed time is: 4 seconds
 
 Congratulations! MANUAL_INPUT puzzle solved!
 =============================================================
-Note that this puzzle took an incredible 137 seconds to solve!
+Note that this puzzle took an incredible 4 seconds to solve!
 
 That is the longest run time of any of Arto's "Top 10 hardest" or any other puzzle, proving that Dr. Inkala was right!
 
-The average EVIL level puzzle on Billions of Free Sudoku Puzzles to Play Online takes 0-1 seconds.
+The average EVIL level puzzle on Billions of Free Sudoku Puzzles to Play Online takes 100 milliseconds.
 
 ======================
 Mode 2 (Chrome only!):
@@ -407,13 +405,13 @@ Up
 
 arrow and enter (solveit)
 
-Probably zero seconds.
+Probably 125 ms.
 
 Pick a hard puzzle.
 
 (Repeat medium steps as above).
 
-Probably 0 or maybe 1 second depending on how slow you computer is.
+Probably 150 ms depending on how slow you computer is.
 
 Pick an "EVIL" puzzle and do same steps as above.
 
