@@ -583,7 +583,7 @@ int insnext();
 
 
 //==========================================================
-void readpuzzle(){
+void readinitialpuzzle(){
 	//==========================================================
 
 	file.close();
@@ -595,6 +595,7 @@ void readpuzzle(){
 		for (int y = 1; y <= cmax - 1; ++y){
 			file >> puzzle[x][y];
 			num = puzzle[x][y];
+			ipuzzle[x][y] = num;
 			if (num == 0){ ++zcnt; }
 			row[x].col[y] = num;
 			col[y].row[x] = num;
@@ -604,6 +605,37 @@ void readpuzzle(){
 		}
 	}
 	file.close();
+	
+	return;
+}
+
+
+//==========================================================
+//end readinitialpuzzle
+//==========================================================   
+//==========================================================
+void readpuzzle(){
+	//==========================================================
+
+	//file.close();
+	//ifstream file;
+	//	file.open("i.txt");
+	zcnt = 0;
+	int num = 0;
+	for (int x = 1; x <= rmax - 1; ++x) {
+		for (int y = 1; y <= cmax - 1; ++y){
+			//file >> puzzle[x][y];
+			puzzle[x][y] = ipuzzle[x][y];
+			num = puzzle[x][y];
+			if (num == 0){ ++zcnt; }
+			row[x].col[y] = num;
+			col[y].row[x] = num;
+			box[x].hash[y] = num;
+			row[x].loc[num] = y;
+			col[y].loc[num] = x;
+		}
+	}
+	//	file.close();
 
 	return;
 }
@@ -611,8 +643,7 @@ void readpuzzle(){
 
 //==========================================================
 //end readpuzzle
-//==========================================================   
-void writepuzzle(){
+void writeinitialpuzzle(){
 	//==========================================================
 	file.close();
 	ofstream file;
@@ -620,7 +651,8 @@ void writepuzzle(){
 	zcnt = 0;
 	for (int x = 1; x <= rmax - 1; ++x) {
 		for (int y = 1; y <= cmax - 1; ++y){
-			file <<puzzle[x][y] << " ";
+		//	file <<puzzle[x][y] << " ";
+			file << puzzle[x][y];
 			int num = puzzle[x][y];
 			row[x].col[y] = num;
 			col[y].row[x] = num;
@@ -638,6 +670,40 @@ void writepuzzle(){
 	
 	return;
 }
+//==========================================================   
+void writepuzzle(){
+	//==========================================================
+//	file.close();
+//	ofstream file;
+	//file.open("i.txt");
+	zcnt = 0;
+	for (int x = 1; x <= rmax - 1; ++x) {
+		for (int y = 1; y <= cmax - 1; ++y){
+		//	file << puzzle[x][y] << " ";
+			ipuzzle[x][y] = puzzle[x][y];
+			int num = puzzle[x][y];
+			row[x].col[y] = num;
+			col[y].row[x] = num;
+			box[x].hash[y] = num;
+			row[x].loc[num] = y;
+			col[y].loc[num] = x;
+
+			if (num == 0){ ++zcnt; }
+
+		}
+		//file << endl;
+	}
+//	file << endl;
+	//file.close();
+
+	return;
+}
+//==========================================================
+//end writepuzzle
+//==========================================================   
+
+
+
 //==========================================================
 //end writepuzzle
 //==========================================================   
@@ -699,13 +765,15 @@ void updp(){
 	//==========================================================                                                                                                                                             
 	writepuzzle();
 
+
 	for (int x = 1; x <= 9; ++x){
 		for (int y = 1; y <= 9; ++y){
 			row[x].loc[y] = 0;
 			col[x].loc[y] = 0;
-			box[x].hash[y] = 0;
 		}
 	}
+	readpuzzle();
+
 	readpuzzle();
 	readboxes();
 	for (int r = 1; r <= 9; ++r){ gfb(zrow, r); glastbl(zrow, r); row[r].done = false; }
@@ -739,9 +807,9 @@ void updp(){
 		readbox(b);
 	}
 
-	writepuzzle();
-	readpuzzle();
-	readboxes();
+	//writepuzzle();
+//	readpuzzle();
+//	readboxes();
 
 
 	// cout<<endl<<"Puzzle updated*****************"<<endl;
@@ -2317,6 +2385,7 @@ void rldinitialpuzzle(){
 			num = puzzle[x][y];
 			row[x].col[y] = num;
 			col[y].row[x] = num;
+			box[x].hash[y] = num;
 			row[x].loc[num] = y;
 			col[y].loc[num] = x;
 			if (num == 0){ zcnt++; }
@@ -8632,7 +8701,7 @@ int inspuzzle(int r, int c, int v){
 	int res = 0;
 	checkfin();
 	if (glerr){ errcnt++; writenotallowedcnt++; return 0; }
-
+	//if (glerr){ rldinitialpuzzle(); lzcnt = zcnt; }
 
 	//========debug tool========================================	
 	//==========================================================
@@ -8704,7 +8773,6 @@ int inspuzzle(int r, int c, int v){
 			writenotallowedcnt = 0;
 			writepuzzle();
 			readpuzzle();
-
 			updp();
 		}
 	}
@@ -8922,7 +8990,7 @@ int _tmain(){ //for windows
 	//=================================
 	lzcnt = zcnt;
 	//cout<<endl<<"in function main"<<endl;
-	if (!ranonce){ getpuzzleandeditmask(); ranonce = true; }
+	if (!ranonce){ getpuzzleandeditmask(); ranonce = true; readinitialpuzzle(); }
 
 	readpuzzle();
 	updp();
@@ -11036,7 +11104,8 @@ int getpuzzleandeditmask()
 	for (int index = 73; index <= 81; index++)
 		puzzle[zrow][index - 72] = array[index];
 
-	writepuzzle();
+//  writepuzzle();
+	writeinitialpuzzle();
 	saveinitialpuzzle();
     rldinitialpuzzle();
 	return 0;
