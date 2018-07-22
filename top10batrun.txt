@@ -1,0 +1,656 @@
+This is the log file of a run of my program against Arto Inkala's "Top 10 World's Hardest Sudoku Puzzles"
+
+I made a simple bat file s.bat:
+
+copy escargot.txt i.txt
+Sudoku_solver.exe
+copy "killer application" i.txt
+Sudoku_solver.exe
+copy "lucky diamond" i.txt
+Sudoku_solver.exe
+copy wormhole i.txt
+Sudoku_solver.exe
+copy labyrinth i.txt
+Sudoku_solver.exe
+copy circles i.txt
+Sudoku_solver.exe
+copy squadron i.txt
+Sudoku_solver.exe
+copy honeypot i.txt
+Sudoku_solver.exe
+copy tweezers i.txt
+Sudoku_solver.exe
+copy "broken brick"  i.txt
+Sudoku_solver.exe
+
+
+The order is the same as on his AI_Sudoku.com website
+
+My program solved all 10 in 6758 milliseconds!
+
+
+
+C:\Users\John\Desktop>s
+
+C:\Users\John\Desktop>copy escargot.txt i.txt
+        1 file(s) copied.
+
+C:\Users\John\Desktop>optimize.exe
+
+*****************************************************
+checksums
+*****************************************************
+*****row checksums *****
+row[1].checksum=45
+row[2].checksum=45
+row[3].checksum=45
+row[4].checksum=45
+row[5].checksum=45
+row[6].checksum=45
+row[7].checksum=45
+row[8].checksum=45
+row[9].checksum=45
+*****col checksums *****
+col[1].checksum=45
+col[2].checksum=45
+col[3].checksum=45
+col[4].checksum=45
+col[5].checksum=45
+col[6].checksum=45
+col[7].checksum=45
+col[8].checksum=45
+col[9].checksum=45
+*****box checksums *****
+box[1].checksum=45
+box[2].checksum=45
+box[3].checksum=45
+box[4].checksum=45
+box[5].checksum=45
+box[6].checksum=45
+box[7].checksum=45
+box[8].checksum=45
+box[9].checksum=45
+
+=====================================================
+$$$$$$$$$$$$$    puzzle bl cnt   =0
+=====================================================
+$$$$$$$$$$$$$    glerr           =0
+$$$$$$$$$$$$$    zcnt            =0
+$$$$$$$$$$$$$    lzcnt           =14
+
+162 857 493
+534 129 678
+789 643 521
+
+475 312 986
+913 586 742
+628 794 135
+
+356 478 219
+241 935 867
+897 261 354
+
+elapsed time= 869 milliseconds
+
+Congratulations! MANUAL_INPUT  puzzle solved!
+
+C:\Users\John\Desktop>copy "killer application" i.txt
+        1 file(s) copied.
+
+C:\Users\John\Desktop>optimize.exe
+
+*****************************************************
+checksums
+*****************************************************
+*****row checksums *****
+row[1].checksum=45
+row[2].checksum=45
+row[3].checksum=45
+row[4].checksum=45
+row[5].checksum=45
+row[6].checksum=45
+row[7].checksum=45
+row[8].checksum=45
+row[9].checksum=45
+*****col checksums *****
+col[1].checksum=45
+col[2].checksum=45
+col[3].checksum=45
+col[4].checksum=45
+col[5].checksum=45
+col[6].checksum=45
+col[7].checksum=45
+col[8].checksum=45
+col[9].checksum=45
+*****box checksums *****
+box[1].checksum=45
+box[2].checksum=45
+box[3].checksum=45
+box[4].checksum=45
+box[5].checksum=45
+box[6].checksum=45
+box[7].checksum=45
+box[8].checksum=45
+box[9].checksum=45
+
+=====================================================
+$$$$$$$$$$$$$    puzzle bl cnt   =0
+=====================================================
+$$$$$$$$$$$$$    glerr           =0
+$$$$$$$$$$$$$    zcnt            =0
+$$$$$$$$$$$$$    lzcnt           =9
+
+954 826 173
+268 317 594
+173 495 286
+
+819 743 652
+632 951 748
+547 682 319
+
+421 569 837
+386 174 925
+795 238 461
+
+elapsed time= 278 milliseconds
+
+Congratulations! MANUAL_INPUT  puzzle solved!
+
+C:\Users\John\Desktop>copy "lucky diamond" i.txt
+        1 file(s) copied.
+
+C:\Users\John\Desktop>optimize.exe
+
+*****************************************************
+checksums
+*****************************************************
+*****row checksums *****
+row[1].checksum=45
+row[2].checksum=45
+row[3].checksum=45
+row[4].checksum=45
+row[5].checksum=45
+row[6].checksum=45
+row[7].checksum=45
+row[8].checksum=45
+row[9].checksum=45
+*****col checksums *****
+col[1].checksum=45
+col[2].checksum=45
+col[3].checksum=45
+col[4].checksum=45
+col[5].checksum=45
+col[6].checksum=45
+col[7].checksum=45
+col[8].checksum=45
+col[9].checksum=45
+*****box checksums *****
+box[1].checksum=45
+box[2].checksum=45
+box[3].checksum=45
+box[4].checksum=45
+box[5].checksum=45
+box[6].checksum=45
+box[7].checksum=45
+box[8].checksum=45
+box[9].checksum=45
+
+=====================================================
+$$$$$$$$$$$$$    puzzle bl cnt   =0
+=====================================================
+$$$$$$$$$$$$$    glerr           =0
+$$$$$$$$$$$$$    zcnt            =0
+$$$$$$$$$$$$$    lzcnt           =25
+
+128 576 493
+549 132 786
+376 948 125
+
+761 285 934
+832 694 571
+495 317 268
+
+654 723 819
+213 859 647
+987 461 352
+
+elapsed time= 108 milliseconds
+
+Congratulations! MANUAL_INPUT  puzzle solved!
+
+C:\Users\John\Desktop>copy wormhole i.txt
+        1 file(s) copied.
+
+C:\Users\John\Desktop>optimize.exe
+
+*****************************************************
+checksums
+*****************************************************
+*****row checksums *****
+row[1].checksum=45
+row[2].checksum=45
+row[3].checksum=45
+row[4].checksum=45
+row[5].checksum=45
+row[6].checksum=45
+row[7].checksum=45
+row[8].checksum=45
+row[9].checksum=45
+*****col checksums *****
+col[1].checksum=45
+col[2].checksum=45
+col[3].checksum=45
+col[4].checksum=45
+col[5].checksum=45
+col[6].checksum=45
+col[7].checksum=45
+col[8].checksum=45
+col[9].checksum=45
+*****box checksums *****
+box[1].checksum=45
+box[2].checksum=45
+box[3].checksum=45
+box[4].checksum=45
+box[5].checksum=45
+box[6].checksum=45
+box[7].checksum=45
+box[8].checksum=45
+box[9].checksum=45
+
+=====================================================
+$$$$$$$$$$$$$    puzzle bl cnt   =0
+=====================================================
+$$$$$$$$$$$$$    glerr           =0
+$$$$$$$$$$$$$    zcnt            =0
+$$$$$$$$$$$$$    lzcnt           =3
+
+984 276 351
+317 954 826
+625 381 794
+
+562 839 417
+149 567 238
+738 412 569
+
+451 793 682
+293 648 175
+876 125 943
+
+elapsed time= 1377 milliseconds
+
+Congratulations! MANUAL_INPUT  puzzle solved!
+
+C:\Users\John\Desktop>copy labyrinth i.txt
+        1 file(s) copied.
+
+C:\Users\John\Desktop>optimize.exe
+
+*****************************************************
+checksums
+*****************************************************
+*****row checksums *****
+row[1].checksum=45
+row[2].checksum=45
+row[3].checksum=45
+row[4].checksum=45
+row[5].checksum=45
+row[6].checksum=45
+row[7].checksum=45
+row[8].checksum=45
+row[9].checksum=45
+*****col checksums *****
+col[1].checksum=45
+col[2].checksum=45
+col[3].checksum=45
+col[4].checksum=45
+col[5].checksum=45
+col[6].checksum=45
+col[7].checksum=45
+col[8].checksum=45
+col[9].checksum=45
+*****box checksums *****
+box[1].checksum=45
+box[2].checksum=45
+box[3].checksum=45
+box[4].checksum=45
+box[5].checksum=45
+box[6].checksum=45
+box[7].checksum=45
+box[8].checksum=45
+box[9].checksum=45
+
+=====================================================
+$$$$$$$$$$$$$    puzzle bl cnt   =0
+=====================================================
+$$$$$$$$$$$$$    glerr           =0
+$$$$$$$$$$$$$    zcnt            =0
+$$$$$$$$$$$$$    lzcnt           =17
+
+165 497 823
+247 538 169
+839 126 457
+
+651 342 798
+372 981 645
+498 675 312
+
+584 213 976
+716 859 234
+923 764 581
+
+elapsed time= 208 milliseconds
+
+Congratulations! MANUAL_INPUT  puzzle solved!
+
+C:\Users\John\Desktop>copy circles i.txt
+        1 file(s) copied.
+
+C:\Users\John\Desktop>optimize.exe
+
+*****************************************************
+checksums
+*****************************************************
+*****row checksums *****
+row[1].checksum=45
+row[2].checksum=45
+row[3].checksum=45
+row[4].checksum=45
+row[5].checksum=45
+row[6].checksum=45
+row[7].checksum=45
+row[8].checksum=45
+row[9].checksum=45
+*****col checksums *****
+col[1].checksum=45
+col[2].checksum=45
+col[3].checksum=45
+col[4].checksum=45
+col[5].checksum=45
+col[6].checksum=45
+col[7].checksum=45
+col[8].checksum=45
+col[9].checksum=45
+*****box checksums *****
+box[1].checksum=45
+box[2].checksum=45
+box[3].checksum=45
+box[4].checksum=45
+box[5].checksum=45
+box[6].checksum=45
+box[7].checksum=45
+box[8].checksum=45
+box[9].checksum=45
+
+=====================================================
+$$$$$$$$$$$$$    puzzle bl cnt   =0
+=====================================================
+$$$$$$$$$$$$$    glerr           =0
+$$$$$$$$$$$$$    zcnt            =0
+$$$$$$$$$$$$$    lzcnt           =4
+
+485 629 713
+769 341 825
+132 875 496
+
+513 792 684
+927 468 531
+648 513 279
+
+251 986 347
+394 257 168
+876 134 952
+
+elapsed time= 163 milliseconds
+
+Congratulations! MANUAL_INPUT  puzzle solved!
+
+C:\Users\John\Desktop>copy squadron i.txt
+        1 file(s) copied.
+
+C:\Users\John\Desktop>optimize.exe
+
+*****************************************************
+checksums
+*****************************************************
+*****row checksums *****
+row[1].checksum=45
+row[2].checksum=45
+row[3].checksum=45
+row[4].checksum=45
+row[5].checksum=45
+row[6].checksum=45
+row[7].checksum=45
+row[8].checksum=45
+row[9].checksum=45
+*****col checksums *****
+col[1].checksum=45
+col[2].checksum=45
+col[3].checksum=45
+col[4].checksum=45
+col[5].checksum=45
+col[6].checksum=45
+col[7].checksum=45
+col[8].checksum=45
+col[9].checksum=45
+*****box checksums *****
+box[1].checksum=45
+box[2].checksum=45
+box[3].checksum=45
+box[4].checksum=45
+box[5].checksum=45
+box[6].checksum=45
+box[7].checksum=45
+box[8].checksum=45
+box[9].checksum=45
+
+=====================================================
+$$$$$$$$$$$$$    puzzle bl cnt   =0
+=====================================================
+$$$$$$$$$$$$$    glerr           =0
+$$$$$$$$$$$$$    zcnt            =0
+$$$$$$$$$$$$$    lzcnt           =22
+
+653 749 218
+794 821 635
+128 536 749
+
+469 352 871
+531 687 924
+287 194 356
+
+875 913 462
+312 468 597
+946 275 183
+
+Elapsed time is: 3 seconds
+
+Congratulations! MANUAL_INPUT  puzzle solved!
+
+C:\Users\John\Desktop>copy honeypot i.txt
+        1 file(s) copied.
+
+C:\Users\John\Desktop>optimize.exe
+
+*****************************************************
+checksums
+*****************************************************
+*****row checksums *****
+row[1].checksum=45
+row[2].checksum=45
+row[3].checksum=45
+row[4].checksum=45
+row[5].checksum=45
+row[6].checksum=45
+row[7].checksum=45
+row[8].checksum=45
+row[9].checksum=45
+*****col checksums *****
+col[1].checksum=45
+col[2].checksum=45
+col[3].checksum=45
+col[4].checksum=45
+col[5].checksum=45
+col[6].checksum=45
+col[7].checksum=45
+col[8].checksum=45
+col[9].checksum=45
+*****box checksums *****
+box[1].checksum=45
+box[2].checksum=45
+box[3].checksum=45
+box[4].checksum=45
+box[5].checksum=45
+box[6].checksum=45
+box[7].checksum=45
+box[8].checksum=45
+box[9].checksum=45
+
+=====================================================
+$$$$$$$$$$$$$    puzzle bl cnt   =0
+=====================================================
+$$$$$$$$$$$$$    glerr           =0
+$$$$$$$$$$$$$    zcnt            =0
+$$$$$$$$$$$$$    lzcnt           =19
+
+182 394 567
+967 158 243
+345 672 918
+
+829 731 654
+756 249 381
+431 586 792
+
+593 417 826
+218 963 475
+674 825 139
+
+elapsed time= 409 milliseconds
+
+Congratulations! MANUAL_INPUT  puzzle solved!
+
+C:\Users\John\Desktop>copy tweezers i.txt
+        1 file(s) copied.
+
+C:\Users\John\Desktop>optimize.exe
+
+*****************************************************
+checksums
+*****************************************************
+*****row checksums *****
+row[1].checksum=45
+row[2].checksum=45
+row[3].checksum=45
+row[4].checksum=45
+row[5].checksum=45
+row[6].checksum=45
+row[7].checksum=45
+row[8].checksum=45
+row[9].checksum=45
+*****col checksums *****
+col[1].checksum=45
+col[2].checksum=45
+col[3].checksum=45
+col[4].checksum=45
+col[5].checksum=45
+col[6].checksum=45
+col[7].checksum=45
+col[8].checksum=45
+col[9].checksum=45
+*****box checksums *****
+box[1].checksum=45
+box[2].checksum=45
+box[3].checksum=45
+box[4].checksum=45
+box[5].checksum=45
+box[6].checksum=45
+box[7].checksum=45
+box[8].checksum=45
+box[9].checksum=45
+
+=====================================================
+$$$$$$$$$$$$$    puzzle bl cnt   =0
+=====================================================
+$$$$$$$$$$$$$    glerr           =0
+$$$$$$$$$$$$$    zcnt            =0
+$$$$$$$$$$$$$    lzcnt           =4
+
+279 316 854
+538 294 716
+614 578 392
+
+487 169 235
+923 745 681
+156 823 479
+
+342 957 168
+791 682 543
+865 431 927
+
+elapsed time= 127 milliseconds
+
+Congratulations! MANUAL_INPUT  puzzle solved!
+
+C:\Users\John\Desktop>copy "broken brick"  i.txt
+        1 file(s) copied.
+
+C:\Users\John\Desktop>optimize.exe
+
+*****************************************************
+checksums
+*****************************************************
+*****row checksums *****
+row[1].checksum=45
+row[2].checksum=45
+row[3].checksum=45
+row[4].checksum=45
+row[5].checksum=45
+row[6].checksum=45
+row[7].checksum=45
+row[8].checksum=45
+row[9].checksum=45
+*****col checksums *****
+col[1].checksum=45
+col[2].checksum=45
+col[3].checksum=45
+col[4].checksum=45
+col[5].checksum=45
+col[6].checksum=45
+col[7].checksum=45
+col[8].checksum=45
+col[9].checksum=45
+*****box checksums *****
+box[1].checksum=45
+box[2].checksum=45
+box[3].checksum=45
+box[4].checksum=45
+box[5].checksum=45
+box[6].checksum=45
+box[7].checksum=45
+box[8].checksum=45
+box[9].checksum=45
+
+=====================================================
+$$$$$$$$$$$$$    puzzle bl cnt   =0
+=====================================================
+$$$$$$$$$$$$$    glerr           =0
+$$$$$$$$$$$$$    zcnt            =0
+$$$$$$$$$$$$$    lzcnt           =5
+
+451 863 972
+982 714 653
+637 592 841
+
+796 328 514
+315 476 298
+824 951 367
+
+148 639 725
+279 185 436
+563 247 189
+
+elapsed time= 219 milliseconds
+
+Congratulations! MANUAL_INPUT  puzzle solved!
+C:\Users\John\Desktop>
+
+Total 6758 milliseconds
