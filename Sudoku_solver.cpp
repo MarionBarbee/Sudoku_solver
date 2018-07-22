@@ -651,8 +651,8 @@ void writeinitialpuzzle(){
 	zcnt = 0;
 	for (int x = 1; x <= rmax - 1; ++x) {
 		for (int y = 1; y <= cmax - 1; ++y){
-		//	file <<puzzle[x][y] << " ";
-			file << puzzle[x][y];
+			file <<puzzle[x][y] << " ";
+			//file << puzzle[x][y];
 			int num = puzzle[x][y];
 			row[x].col[y] = num;
 			col[y].row[x] = num;
