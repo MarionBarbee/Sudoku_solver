@@ -1,0 +1,192 @@
+C:\Users\John\Desktop\sudoku>t
+
+C:\Users\John\Desktop\sudoku>copy p1.html webpuzzle.html
+        1 file(s) copied.
+
+C:\Users\John\Desktop\sudoku>solver
+983 267 415
+716 534 829
+245 189 763
+
+329 471 586
+468 325 971
+157 698 342
+
+574 916 238
+831 752 694
+692 843 157
+
+elapsed time= 10 milliseconds
+
+
+C:\Users\John\Desktop\sudoku>copy p2.html webpuzzle.html
+        1 file(s) copied.
+
+C:\Users\John\Desktop\sudoku>solver
+725 413 968
+183 679 542
+946 582 713
+
+534 296 871
+879 341 256
+261 758 439
+
+658 127 394
+397 864 125
+412 935 687
+
+elapsed time= 6 milliseconds
+
+
+C:\Users\John\Desktop\sudoku>copy p3.html webpuzzle.html
+        1 file(s) copied.
+
+C:\Users\John\Desktop\sudoku>solver
+318 792 465
+579 416 382
+624 853 179
+
+987 125 634
+453 967 821
+261 348 597
+
+132 674 958
+746 589 213
+895 231 746
+
+elapsed time= 12 milliseconds
+
+
+C:\Users\John\Desktop\sudoku>copy p4.html webpuzzle.html
+        1 file(s) copied.
+
+C:\Users\John\Desktop\sudoku>solver
+462 178 593
+519 623 487
+783 495 261
+
+837 954 612
+295 861 374
+146 237 958
+
+321 589 746
+658 742 139
+974 316 825
+
+elapsed time= 8 milliseconds
+
+
+C:\Users\John\Desktop\sudoku>copy p5.html webpuzzle.html
+        1 file(s) copied.
+
+C:\Users\John\Desktop\sudoku>solver
+546 283 719
+129 675 348
+783 149 265
+
+651 427 983
+972 368 451
+438 951 627
+
+894 536 172
+217 894 536
+365 712 894
+
+elapsed time= 11 milliseconds
+
+
+C:\Users\John\Desktop\sudoku>copy p6.html webpuzzle.html
+        1 file(s) copied.
+
+C:\Users\John\Desktop\sudoku>solver
+369 471 285
+521 968 374
+874 325 961
+
+736 582 149
+452 719 836
+918 634 527
+
+287 156 493
+695 843 712
+143 297 658
+
+elapsed time= 5 milliseconds
+
+
+C:\Users\John\Desktop\sudoku>copy p7.html webpuzzle.html
+        1 file(s) copied.
+
+C:\Users\John\Desktop\sudoku>solver
+482 359 167
+961 872 345
+573 146 298
+
+634 798 512
+795 214 683
+218 635 974
+
+856 927 431
+127 463 859
+349 581 726
+
+elapsed time= 7 milliseconds
+
+
+C:\Users\John\Desktop\sudoku>copy p8.html webpuzzle.html
+        1 file(s) copied.
+
+C:\Users\John\Desktop\sudoku>solver
+496 357 182
+735 128 469
+281 649 753
+
+123 475 896
+649 832 517
+578 961 234
+
+817 296 345
+362 514 978
+954 783 621
+
+elapsed time= 7 milliseconds
+
+
+C:\Users\John\Desktop\sudoku>copy p9.html webpuzzle.html
+        1 file(s) copied.
+
+C:\Users\John\Desktop\sudoku>solver
+439 287 615
+512 643 879
+768 915 324
+
+953 728 461
+186 394 257
+274 156 938
+
+827 461 593
+641 539 782
+395 872 146
+
+elapsed time= 9 milliseconds
+
+
+C:\Users\John\Desktop\sudoku>copy p10.html webpuzzle.html
+        1 file(s) copied.
+
+C:\Users\John\Desktop\sudoku>solver
+623 178 549
+497 352 816
+185 649 237
+
+768 914 325
+314 526 798
+952 837 461
+
+246 781 953
+579 263 184
+831 495 672
+
+elapsed time= 6 milliseconds
+
+C:\Users\John\Desktop\sudoku>

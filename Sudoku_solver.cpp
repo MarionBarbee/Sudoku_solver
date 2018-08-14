@@ -232,9 +232,19 @@ bool  gfirstprint = true;
 int   glerr = 0;
 int   glrow1done = 0;
 int   glcol1done = 0;
-time_t gltime1 = 0;
-time_t gltime2 = 0;
 
+auto start_time = chrono::high_resolution_clock::now();
+int temp;
+
+
+
+
+bool gfirstguess = false;
+
+//auto  gltime1 = std::chrono::high_resolution_clock::now() - std::chrono::high_resolution_clock::now();
+//time_t gltime2 = 0;
+//auto gltime2 = 0;
+auto gltime1 = chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 int   gntargcol = 0;
 uint_fast64_t  gseed;
 int   gthirdpasstargcol = 0;
@@ -262,7 +272,7 @@ int   errcnt = 0;
 bool  ranonce = false;
 
 const int  idle = 0;
-time_t start_time;
+//time_t start_time;
 //==========================================================
 //initial states - extrapolation functionality 
 //==========================================================
@@ -1828,10 +1838,13 @@ void checksumall(){
 	time_t hold_time;
 	hold_time = time(NULL);
 	 
-	time_t elapsedtime = hold_time - start_time;
-	gltime2 = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
-	gelapsedtime = gltime2 - gltime1;
-
+	//time_t elapsedtime = hold_time - start_time;
+	// auto gltime1 = std::chrono::high_resolution_clock::now();
+	//auto gltime2=std::chrono::duration_cast<std::chrono::microseconds>(time).count()
+	auto gltime2 = chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+	auto gelapsedtime = gltime2 - gltime1;
+	//auto end_time = chrono::high_resolution_clock::now();
+	//auto elapsedtime = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
 
 
 	cout << endl;
@@ -1888,12 +1901,14 @@ void checksumall(){
 	cout << endl;
 
 	cout << "puzzle type=" << puzzletype << endl;
-	if (elapsedtime>2){
-		cout << "Elapsed time is: " << elapsedtime << " seconds" << endl;
+	if (gelapsedtime>=1000){
+		cout << "Elapsed time is: " << gelapsedtime/1000 << " milliseconds" << endl;
 	}
 	else{
-		cout << "elapsed time= " << gelapsedtime << " milliseconds" << endl;
+		if (gelapsedtime == 0){ cout << "elapsed time < 500 microseconds" << endl; }
+		else { cout << "elapsed time= " << gelapsedtime << " microseconds" << endl; }
 	}
+
 	if (zcnt == 0){
 		if (glerr == 0){
 
@@ -1904,34 +1919,35 @@ void checksumall(){
 
 
 
-	remove("view-source_view.websudoku.com__level=1.html");
-	remove("view-source_show.websudoku.com__level=1.html");
-	remove("view-source_view.websudoku.com__level=2.html");
-	remove("view-source_show.websudoku.com__level=2.html");
-	remove("view-source_view.websudoku.com__level=3.html");
-	remove("view-source_show.websudoku.com__level=3.html");
-	remove("view-source_view.websudoku.com__level=4.html");
-	remove("view-source_show.websudoku.com__level=4.html");
-
-	remove("view-source_https___nine.websudoku.com__level=4.html");
-	remove("view-source_https___nine.websudoku.com__level=3.html");
-	remove("view-source_https___nine.websudoku.com__level=2.html");
-	remove("view-source_https___nine.websudoku.com__level=1.html");
-
-	remove("view-source_https___show.websudoku.com__level=4.html");
-	remove("view-source_https___show.websudoku.com__level=3.html");
-	remove("view-source_https___show.websudoku.com__level=2.html");
-	remove("view-source_https___show.websudoku.com__level=1.html");
-
-	remove("view-source_https___view.websudoku.com__level=4.html");
-	remove("view-source_https___view.websudoku.com__level=3.html");
-	remove("view-source_https___view.websudoku.com__level=2.html");
-	remove("view-source_https___view.websudoku.com__level=1.html");
-
-	remove("webpuzzle.html");
-
 	remove("i.txt");
-	remove("saveinitialpuzzle.txt");
+	if ((puzzletype != "batch") && (puzzletype != "MANUAL_INPUT")){
+		remove("view-source_view.websudoku.com__level=1.html");
+		remove("view-source_show.websudoku.com__level=1.html");
+		remove("view-source_view.websudoku.com__level=2.html");
+		remove("view-source_show.websudoku.com__level=2.html");
+		remove("view-source_view.websudoku.com__level=3.html");
+		remove("view-source_show.websudoku.com__level=3.html");
+		remove("view-source_view.websudoku.com__level=4.html");
+		remove("view-source_show.websudoku.com__level=4.html");
+
+		remove("view-source_https___nine.websudoku.com__level=4.html");
+		remove("view-source_https___nine.websudoku.com__level=3.html");
+		remove("view-source_https___nine.websudoku.com__level=2.html");
+		remove("view-source_https___nine.websudoku.com__level=1.html");
+
+		remove("view-source_https___show.websudoku.com__level=4.html");
+		remove("view-source_https___show.websudoku.com__level=3.html");
+		remove("view-source_https___show.websudoku.com__level=2.html");
+		remove("view-source_https___show.websudoku.com__level=1.html");
+
+		remove("view-source_https___view.websudoku.com__level=4.html");
+		remove("view-source_https___view.websudoku.com__level=3.html");
+		remove("view-source_https___view.websudoku.com__level=2.html");
+		remove("view-source_https___view.websudoku.com__level=1.html");
+	}
+	else{ remove("webpuzzle.html"); }
+	
+ 
 
 
 
@@ -8144,11 +8160,13 @@ void initp(){
 	if (saveonce == 1){
 		//time to start timing
 		saveonce = 0;
-		start_time = time(NULL);
-		gltime1 = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+		//start_time = time(NULL);
+		// gltime1 = std::chrono::high_resolution_clock::now();
+		 gltime1 = chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+		// start_time = chrono::high_resolution_clock::now();
 
 	}
-	return;
+	
 }
 
 //=========================================================
@@ -8685,7 +8703,7 @@ int _tmain(){ //for windows
 		int tlzcnt = lzcnt;
 		lzcnt = zcnt;
 		checkfin();
-		checkcnts();
+		//checkcnts();
 		//the ony way glerr could be set in the non-guessing part would be if a previous best candidate turned 
 		//out to be incorrect.
 		if (glerr){ break; }
@@ -8697,12 +8715,14 @@ int _tmain(){ //for windows
 		// Next line true means puzzle was reoaded already. No point staying in this loop.
 		//if (zcnt >= lzcnt){ break; }
 		if (zcnt >= tlzcnt){ break; }
+		if (zcnt >= lzcnt){ break; }
 	}
 	//========================
 	//end non guessing loop
 	//========================
-
+	if (glerr){ rldinitialpuzzle(); }
 	checkfin();
+
 	//get nicely randomized initial seed off system clock
 	gseed = std::chrono::system_clock::now().time_since_epoch().count();
 	// for linux if ((zcnt<lzcnt)&&(zcnt>0)&&(!glerr)){main();}
@@ -8711,8 +8731,7 @@ int _tmain(){ //for windows
 	//everything is going ok. Go back to non-guessing.
 	//This is done through recursive call to main from main.
 	if ((zcnt < lzcnt) && (zcnt>0) && (!glerr)){ _tmain(); }  //everything is going ok. Go back to non-guessing.
-
-	checkfin();
+	if (!gfirstguess){ gfirstguess = true; saveinitialpuzzle(); }
 	while (true){
 		checkfin();
 		//choose best candidate. exact candidate cannot be currently determined.
@@ -8720,8 +8739,10 @@ int _tmain(){ //for windows
 		//this program can solve the entire puzzle heurisically and deterministically without ever having to
 		//guess ever whether a number being inserted is correct. It will always know.
 		//That's why this is the fastest solver on Earth.
+	
 		res = hardestalgo(); //best guess....sigh
 		checkfin();
+		if ((res > 0) && (!glerr)) { _tmain(); }
 		if ((zcnt < lzcnt) && (zcnt>0) && (!glerr)){ _tmain(); }
 
 		if (glerr){ rldinitialpuzzle(); }
@@ -8747,61 +8768,35 @@ int hardestalgo(){
 	mt19937_64 generator(gseed);  // mt19937_64 is a standard 64 bit mersenne_twister_engine
 	checkfin();
 	if ((zcnt < lzcnt) && (!glerr)){
-		return 0;       //don't guess anymore
+		return 1;       //don't guess anymore
 	}
-	int mcnt = gm(zrow, gindex);
+	int mcnt = 0;
 	if (glerr){
 		//if glerr was set coming in that means that the last extrapolation choice was
 		//no good and bad values were probably written to the puzzle after that last bad choice
 		//Puzzle is a write-off, reload the initial puzzle
 		rldinitialpuzzle();
-		gindex = generator() % 9 + 1;     //get a new totally random row 
-		mcnt = gm(zrow, gindex);
 	}
-	checkfin();
-	if (zcnt < lzcnt){
-		return 0;       //don't guess anymore
-	}
-	if (mcnt == 0){
-		row[gindex].done = true;
-		//	cout << "row[" << gindex << "].done=true" << endl;
+	 
+	while (true){
+		 
+		if (glerr){
+			rldinitialpuzzle();
+		}
 		while (true){//Look for the first incomplete row then break out.
 			//The row to check is completely randomized by a high quality generator.
 			gindex = generator() % 9 + 1;
-			if (row[gindex].done == false){ break; }
-		}
-		//		cout << "new row=" << gindex << endl;
-		//find number of incomplete squares in the new row.
-		mcnt = gm(zrow, gindex);
-		lzcnt++;   //fake lzcnt to make sure no unnecessary guessing happens.
-		return 0;  //go back to heuristic deterministic non-guessing algorithms.
-	}
-	while (true){
-		//Thig glerr can only have occurred prior to entering this while loop.
-		//Because it is set to false at the bottom of this loop.
-		if (glerr){
-			rldinitialpuzzle();
-			while (true){//Get a new perfectly random row.
-				gindex = generator() % 9 + 1;
-				if (row[gindex].done == false){ break; }
+			if (row[gindex].done == false){
+				mcnt = gm(zrow, gindex);
+				if (mcnt > 1){ break; }
 			}
-			//	cout << "new row=" << gindex << endl;
-			mcnt = gm(zrow, gindex);
 		}
-		checkfin();
-		mcnt = gm(zrow, gindex);
-		checkfin();
-		if (mcnt == 0){
-			row[gindex].done = true;
-			//row complete, fake lzcnt to quit guessing.
-			lzcnt++;
-			return 0; //go back to heuristic deterministic non-guessing algorithms.
-		}
+		
 		int bcnt = gbls(zrow, gindex); //get number of incomplete squares in current row.
-		int fm = mrow[1];              //Set current first missing #1-9
-		int lm = mrow[mcnt];           //last missing
-		int fb = blrow[1];             //first blank position
-		int lb = blrow[bcnt];          //last blank
+		//int fm = mrow[1];              //Set current first missing #1-9
+		//int lm = mrow[mcnt];           //last missing
+	   //	int fb = blrow[1];             //first blank position
+		//int lb = blrow[bcnt];          //last blank
 		int rand1, rand2;
 		// generate random index to ordered list of missing numbers in row
 		rand1 = generator() % mcnt + 1;
@@ -8813,7 +8808,11 @@ int hardestalgo(){
 		int value = mrow[rand2];
 		//will only insert the randomized value at the random location first off by making certain that
 		//an original puzzle clue is not being accidentally overwritten.
-		if (puzzle[gindex][col] == 0){  //don't try to overwrite if not zero
+		
+		if (puzzle[gindex][col] > 0){//something is wrong
+			rldinitialpuzzle();// //don't try to overwrite if not zero
+		}
+		else{
 			//Do some validity checks before trying the actual insert
 			int inrow = finrow(gindex, value);     //Make sure that number is not in current row
 			int incol = fincol(col, value);        //Or column
@@ -8823,19 +8822,11 @@ int hardestalgo(){
 			if ((inrow == 0) && (incol == 0) && (inbox == 0) && (!glerr)){   //looks clean, go ahead and insert;
 				if (suppressoutput == false){ glastwrite = "hardestalgo"; }
 				res = inspuzzle(gindex, col, value);  //insert the valid but possibly incorrect value.
-			}
-			checkfin();
-			if (res > 0){//if the number inserted ok then quit quessing.
-				lzcnt++;    //to prevent guessing
-				return 0;   //Backing to the solving algorithms.
-			}
-			if (res == 0){ glerr = false; } //if the number wouldn't insert then don't reload because it
-			//it wasn't actually written into the puzzle
-		}
-		//if rand index was already occupied, ignore and continue;
-		checkfin();//Are we done yet? 
+				if ((res > 0) && (!glerr)){ lzcnt++; return res; }
+				else{ rldinitialpuzzle(); }
+			}		
+		}		
 	}
-	checkfin(); //while loop never really break out
 	return 0;
 }
 //end hardestalgo
