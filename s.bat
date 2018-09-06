@@ -1,21 +1,21 @@
 copy escargot.txt i.txt
-solver
+Sudoku_solver
 copy "killer application" i.txt
-solver
+Sudoku_solver
 copy "lucky diamond" i.txt
-solver
+Sudoku_solver
 copy wormhole i.txt
-solver
+Sudoku_solver
 copy labyrinth i.txt
-solver
+Sudoku_solver
 copy circles i.txt
-solver
+Sudoku_solver
 copy squadron i.txt
-solver
+Sudoku_solver
 copy honeypot i.txt
-solver
+Sudoku_solver
 copy tweezers i.txt
-solver
+Sudoku_solver
 copy "broken brick"  i.txt
-solver
+Sudoku_solver
  
