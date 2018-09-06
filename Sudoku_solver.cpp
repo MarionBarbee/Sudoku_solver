@@ -8565,7 +8565,7 @@ int inspuzzle(int r, int c, int v){
 	if (puzzle[r][c] != 0){
 
 
-	//	if (gtable[r][c] == puzzle[r][c]){ return 1; }
+		if (gtable[r][c] == puzzle[r][c]){ return 1; }
 		if (btable[r][c] == puzzle[r][c]){ return 1; }
 	}
 		 
@@ -8966,7 +8966,7 @@ void gprocrowunit(int runit){
 						//we have A copy. but is it good?
 						//take a chance
 						rlds2puzzle(1);
-						lastwrite[1].valid = false;
+					//	lastwrite[1].valid = false;
 						if (debug){
 							cout << "R**********************************gproccol*************************************reloaded our saved puzzle!!!!!!!!!!!" << endl;
 							//mark last write as not valid just in case
@@ -9162,6 +9162,7 @@ void gproccolunit(int cunit){
 		cout << "s2zcnt[2]=" << s2zcnt[2] << "zcnt=" << zcnt << endl;
 	}
 	if ((zcnt > s2zcnt[1]) && (zcnt > s2zcnt[2]) && (zcnt > s2zcnt[3])){
+	//if (zcnt > s2zcnt[2]){
 
 		if (lastwrite[2].valid){
 			if (currgcnt > 0){
@@ -9184,7 +9185,7 @@ void gproccolunit(int cunit){
 						//we have A copy. but is it good?
 						//take a chance
 						rlds2puzzle(2);
-						lastwrite[2].valid = false;
+						//lastwrite[2].valid = false;
 						if (debug){
 							cout << "R**********************************gproccol*************************************reloaded our saved puzzle!!!!!!!!!!!" << endl;
 							//mark last write as not valid just in case
@@ -9386,17 +9387,6 @@ void gproccolunit(int cunit){
 	}
 	return;
 }
-void try1ortry2(){
-
-	return;
-}
-//==========================================================    
-void try1try2update(int runit){
-//========================================================== 
-
-	return;
-}
-
 
 
 
@@ -9412,6 +9402,7 @@ int predictpath(){
 		return 1;       //don't guess anymore
 	}
 	if ((zcnt > s2zcnt[1]) && (zcnt > s2zcnt[2]) && (zcnt > s2zcnt[3])){
+	//	if (zcnt > s2zcnt[3]){
 
 		if (lastwrite[3].valid){
 			if (currgcnt > 0){
@@ -9434,7 +9425,7 @@ int predictpath(){
 						//we have A copy. but is it good?
 						//take a chance
 						rlds2puzzle(3);
-						lastwrite[3].valid = false;
+					//	lastwrite[3].valid = false;
 						if (debug){
 							cout << "R**********************************gproccol*************************************reloaded our saved puzzle!!!!!!!!!!!" << endl;
 							//mark last write as not valid just in case
