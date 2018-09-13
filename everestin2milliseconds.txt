@@ -1,0 +1,59 @@
+
+C:\Users\John\Desktop\sudoku>copy everest i.txt
+        1 file(s) copied.
+
+C:\Users\John\Desktop\sudoku>solver
+
+*****************************************************
+checksums
+*****************************************************
+*****row checksums *****
+row[1].checksum=45
+row[2].checksum=45
+row[3].checksum=45
+row[4].checksum=45
+row[5].checksum=45
+row[6].checksum=45
+row[7].checksum=45
+row[8].checksum=45
+row[9].checksum=45
+*****col checksums *****
+col[1].checksum=45
+col[2].checksum=45
+col[3].checksum=45
+col[4].checksum=45
+col[5].checksum=45
+col[6].checksum=45
+col[7].checksum=45
+col[8].checksum=45
+col[9].checksum=45
+*****box checksums *****
+box[1].checksum=45
+box[2].checksum=45
+box[3].checksum=45
+box[4].checksum=45
+box[5].checksum=45
+box[6].checksum=45
+box[7].checksum=45
+box[8].checksum=45
+box[9].checksum=45
+
+=====================================================
+
+812 753 649
+943 682 175
+675 491 283
+
+154 237 896
+369 845 721
+287 169 534
+
+521 974 368
+438 526 917
+796 318 452
+
+puzzle type=MANUAL_INPUT
+Elapsed time is: 2 milliseconds
+
+
+C:\Users\John\Desktop\sudoku>
