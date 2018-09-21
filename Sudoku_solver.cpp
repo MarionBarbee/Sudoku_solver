@@ -397,6 +397,13 @@ int s2puzzle[4][10][10];
 bool s2saved = false;
 bool s2rlded = false;
 int oldcurrgcnt = 0;
+int gunit = 0;
+bool thisisaguess = false;
+
+
+
+
+
 
 void restorefromgtable(int listptr);
 
@@ -585,6 +592,8 @@ int pickcolchoice(int c);
 void checkglist();
 int pickrowchoice2(int r);
 int  gprocall(int r);
+int pickrand2();
+int pickrandunbounded();
 //==========================================================   
 int gprocall(int r){
 	//========================================================== 
@@ -673,17 +682,19 @@ int gprocall(int r){
 		if ((elimcount >= 0) && (mcount > 1)){
 			if ((elimcount == mcount - 2) && (targbl > 0)){
 
+				int inrow = finrow(r, currentm[i]);
+				int incol = fincol(targbl, currentm[i]);
 				int tbox = gboxfromrowandpos(r, targbl);
 				int tboxres = finbox(tbox, currentm[i]);
 				
-				if (tboxres == 0){
-					if ((g2table[r][targbl] == 0)&&(b2table[r][targbl]==0)&&(gtable[r][targbl]==0)&&(btable[r][targbl]==0)){
+				if ((tboxres == 0)&&(!inrow)&&(!incol)){
+				//	if ((g2table[r][targbl] == 0)&&(b2table[r][targbl]==0)&&(gtable[r][targbl]==0)&&(btable[r][targbl]==0)){
 						glastwrite = "***********************************elim 2**********************************************************gproc7855";
 						result = inspuzzle(r, targbl, currentm[i]);
 						insg2table(r, targbl, currentm[i]);
 						return result;
 					}
-				}
+			//	}
 			}
 		}
 
@@ -710,7 +721,7 @@ void r2chinit(){
 			r2ch[r].num[v].chAnum = v;
 			r2ch[r].num[v].chBtried = no;
 			r2ch[r].num[v].chBnum = v;
-		//	r2ch[r].num[v].ABptr = ABptr ;
+			r2ch[r].num[v].ABptr = 0 ;
 		}
 	}
 	return;
@@ -731,7 +742,8 @@ void c2chinit(){
 			c2ch[c].num[v].chAtried = no;
 			c2ch[c].num[v].chAnum = v;
 			c2ch[c].num[v].chBnum = v;
-	//		c2ch[c].num[v].ABptr = ABptr;
+			c2ch[c].num[v].chBtried = no;
+			c2ch[c].num[v].ABptr =0;
 		}
 
 	}
@@ -773,34 +785,41 @@ int  insertr2choices(int runit){
 				if (puzzle[r][c3] > 0){ --places; c3occupied = true; }
 			}
 
-
 			if (places == 2){
 				int chAtried = r2ch[r].num[n].chAtried;
 				int chBtried = r2ch[r].num[n].chBtried;
 				r2ch[r].num[n].chAnum = n;
 				r2ch[r].num[n].chBnum = n;
 				int trywhich = generator() % 2 + 1;
+				if (debug){ cout << "********************************r2**************************trywhich=" << trywhich << endl; }
 				if ((!c1occupied) && (!c2occupied)){
-
 					r2ch[r].num[n].chA = c1;
 					r2ch[r].num[n].chB = c2;
 					if ((trywhich == A) && (!chAtried)){
 						if (debug){
 							cout << "*********************pickrowchoice A*******************" << endl;
 							cout << "**r,v,chA,chB,chAnum,chBnum,chAtried,chBtried******************" << r << n << c1 << c2 << endl;
+							glastwrite = "*****************************insertr2choices A1****************************";
 						}
 						inserted = inspuzzle(r, c1, n);
-						r2ch[r].num[n].chAtried = yes;
+						if (inserted > 0){
+							r2ch[r].num[n].chAtried = yes;
+					//		insgtable(r, c1, n);
+						}
 						return inserted;
 					}
 					else{
-						if (!chBtried){
+						if ((trywhich == B) && (!chBtried)){
 							if (debug){
 								cout << "*********************pickrowchoice B*******************" << endl;
 								cout << "**r,v,chA,chB,chAnum,chBnum,chAtried,chBtried******************" << r << n << c1 << c2 << endl;
+								glastwrite = "*****************************insertr2choices B1****************************";
 							}
 							inserted = inspuzzle(r, c2, n);
-							r2ch[r].num[n].chBtried = yes;
+							if (inserted > 0){
+								r2ch[r].num[n].chBtried = yes;
+							//	insgtable(r, c2, n);
+							}
 							return inserted;
 						}
 					}
@@ -812,19 +831,27 @@ int  insertr2choices(int runit){
 						if (debug){
 							cout << "*********************pickrowchoice A*******************" << endl;
 							cout << "**r,v,chA,chB,chAnum,chBnum,chAtried,chBtried******************" << r << n << c2 << c3 << endl;
+							glastwrite = "*****************************insertr2choices A2****************************";
 						}
 						inserted = inspuzzle(r, c2, n);
-						r2ch[r].num[n].chAtried = yes;
+						if (inserted > 0){
+							r2ch[r].num[n].chAtried = yes;
+					//		insgtable(r, c2, n);
+						}
+						return inserted;
 					}
 					else{
-						if (!chBtried){
+						if ((trywhich == B) && (!chBtried)){
 							if (debug){
 								cout << "*********************pickrowchoice B*******************" << endl;
 								cout << "**r,v,chA,chB,chAnum,chBnum,chAtried,chBtried******************" << r << n << c2 << c3 << endl;
-
+								glastwrite = "*****************************insertr2choices B2****************************";
 							}
 							inserted = inspuzzle(r, c3, n);
-							r2ch[r].num[n].chBtried = yes;
+							if (inserted > 0){
+								r2ch[r].num[n].chBtried = yes;
+						//		insgtable(r, c3, n);
+							}
 							return inserted;
 						}
 					}
@@ -836,30 +863,33 @@ int  insertr2choices(int runit){
 						if (debug){
 							cout << "*********************pickrowchoice A*******************" << endl;
 							cout << "**r,v,chA,chB,chAnum,chBnum,chAtried,chBtried******************" << r << n << c1 << c3 << endl;
-
-						}
+							glastwrite = "*****************************insertr2choices A3****************************";						}
 						inserted = inspuzzle(r, c1, n);
-						r2ch[r].num[n].chAtried = yes;
-					}
-					else{
-						if (!chBtried){
-							if (debug){
-								cout << "*********************pickrowchoice B*******************" << endl;
-								cout << "**r,v,chA,chB,chAnum,chBnum,chAtried,chBtried******************" << r << n << c1 << c3 << endl;
-
-							}
-							inserted = inspuzzle(r, c3, n);
-							r2ch[r].num[n].chBtried = yes;
+						if (inserted > 0){
+							r2ch[r].num[n].chAtried = yes;
+					//		insgtable(r, c1, n);
 						}
 						return inserted;
 					}
-				}
-				 
+					else{
+						if ((trywhich == B) && (!chBtried)){
+							if (debug){
+								cout << "*********************pickrowchoice B*******************" << endl;
+								cout << "**r,v,chA,chB,chAnum,chBnum,chAtried,chBtried******************" << r << n << c1 << c3 << endl;
+								glastwrite = "*****************************insertr2choices B3****************************";
+							}
+							inserted = inspuzzle(r, c3, n);
+							if (inserted > 0){
+								r2ch[r].num[n].chBtried = yes;
+							//	insgtable(r, c3, n);
+							}
+							return inserted;
+						}
+					}
+				}	 
 			}
 		}
-
 	}
-	 
 	return 0;
 }
 	
@@ -876,7 +906,7 @@ int insertc2choices(int cunit){
 	for (int n = 1; n <= 9; ++n){
 		if ((colunit[cunit].nc[n] == 2) && (colunit[cunit].targcol[n] != 0) && (colunit[cunit].targbox[n] != 0)){
 			growsfromtargboxandtargcol(colunit[cunit].targbox[n], colunit[cunit].targcol[n], r1, r2, r3);
-			int c = rowunit[cunit].targrow[n];
+			int c = colunit[cunit].targcol[n];
 			bool r1occupied = false;
 			bool r2occupied = false;
 			bool r3occupied = false;
@@ -900,6 +930,7 @@ int insertc2choices(int cunit){
 				int chBtried = r2ch[c].num[n].chBtried;
 
 				int trywhich = generator() % 2 + 1;
+				if (debug){ cout << "************************************c2**********************trywhich=" << trywhich << endl; }
 				if ((!r1occupied) && (!r2occupied)){
 					c2ch[c].num[n].chA = r1;
 					c2ch[c].num[n].chB = r2;
@@ -907,20 +938,27 @@ int insertc2choices(int cunit){
 						if (debug){
 							cout << "*********************pickcolchoice A*******************" << endl;
 							cout << "**c,v,chA,chB,chAnum,chBnum,chAtried,chBtried******************" << c << n << r1 << r2 << endl;
+							glastwrite = "*****************************insertc2choices A1****************************";
 						}
 						inserted = inspuzzle(r1, c, n);
-						c2ch[c].num[n].chAtried = yes;
+						if (inserted > 0){
+							insgtable(r1, c, n);
+							c2ch[c].num[n].chAtried = yes;
+						}
 						return inserted;
 					}
 					else{
-						if (!chBtried){
+						if ((trywhich == B) && (!chBtried)){
 							if (debug){
 								cout << "*********************pickcolchoice B*******************" << endl;
 								cout << "**c,v,chA,chB,chAnum,chBnum,chAtried,chBtried******************" << c << n << r1 << r2 << endl;
-
+								glastwrite = "*****************************insertc2choices B1****************************";
 							}
-							inserted = inspuzzle(r2, c, n);
-							c2ch[c].num[n].chBtried = yes;
+							inserted = inspuzzle(r2, c, n);	
+							if (inserted > 0){
+								insgtable(r2, c, n);
+								c2ch[c].num[n].chBtried = yes;
+							}
 							return inserted;
 						}
 					}
@@ -932,20 +970,28 @@ int insertc2choices(int cunit){
 						if (debug){
 							cout << "*********************pickcolchoice A*******************" << endl;
 							cout << "**c,v,chA,chB,chAnum,chBnum,chAtried,chBtried******************" << c << n << r2 << r3 << endl;
+							glastwrite = "*****************************insertc2choices A2****************************";
 						}
-						inserted = inspuzzle(r2, c, n);
-						c2ch[c].num[n].chAtried = yes;
+						inserted = inspuzzle(r2, c, n);	
+						if (inserted > 0){
+							insgtable(r2, c, n);
+							c2ch[c].num[n].chAtried = yes;
+						}
 						return inserted;
 					}
 					else{
-						if (!chBtried){
+						if ((trywhich == B) && (!chBtried)){
 							if (debug){
 								cout << "*********************pickcolchoice B*******************" << endl;
 								cout << "**c,v,chA,chB,chAnum,chBnum,chAtried,chBtried******************" << c << n << r2 << r3 << endl;
-
+								glastwrite = "*****************************insertc2choices B2****************************";
 							}
-							inserted = inspuzzle(r3, c, n);
 							c2ch[c].num[n].chBtried = yes;
+							inserted = inspuzzle(r3, c, n);
+							if (inserted > 0){
+								insgtable(r3, c, n);
+								c2ch[c].num[n].chBtried = yes;
+							}
 							return inserted;
 						}
 					}
@@ -957,20 +1003,28 @@ int insertc2choices(int cunit){
 						if (debug){
 							cout << "*********************pickcolchoice A*******************" << endl;
 							cout << "**c,v,chA,chB,chAnum,chBnum,chAtried,chBtried******************" << c << n << r1 << r3 << endl;
+							glastwrite = "*****************************insertc2choices A3****************************";
+
 						}
 						inserted = inspuzzle(r1, c, n);
-						c2ch[c].num[n].chAtried = yes;
+						if (inserted > 0){
+							insgtable(r1, c, n);
+							c2ch[c].num[n].chAtried = yes;
+						}
 						return inserted;
 					}
 					else{
-						if (!chBtried){
+						if ((trywhich == B) && (!chBtried)){
 							if (debug){
 								cout << "*********************pickcolchoice B*******************" << endl;
 								cout << "**c,v,chA,chB,chAnum,chBnum,chAtried,chBtried******************" << c << n << r1 << r3 << endl;
-
+								glastwrite = "*****************************insertc2choices B3****************************";
 							}
 							inserted = inspuzzle(r3, c, n);
-							c2ch[c].num[n].chBtried = yes;
+							if (inserted > 0){
+								insgtable(r3, c, n);
+								c2ch[c].num[n].chBtried = yes;
+							}
 							return inserted;
 						}
 					}
@@ -1243,7 +1297,7 @@ void updp(){
 	
 	for (int i = 1; i <= 9; i++){ gbls(zrow, i); gbls(zcol, i); gbls(zbox, i); }
 	for (int i = 1; i <= 9; i++){ gm(zrow, i); gm(zcol, i); gm(zbox, i); }
-	//readboxes();
+	readboxes();
 	
 	
 	for (int i = 1; i <= rmax - 1; ++i){
@@ -2852,13 +2906,8 @@ int gallmincol(int c, int &m1, int &m2, int &m3, int &m4, int &m5, int &m6, int 
 }
 //==========================================================                 
 //end function gallmincol                                                                 
-
-
-
 //==========================================================
 void rldsaved(){
-
-	//debug = true;
 	if (debug){
 		cout << "************************Reloading initial puzzle" << endl; cout << "glerr= " << glerr << endl;
 		printpuzzle();  
@@ -2869,24 +2918,9 @@ void rldsaved(){
 			cout << "glist[" <<i << "].c=" << glist[i].c << endl;
 			cout << "glist[" << i << "].v=" << glist[i].v << endl;
 			cout << "glist[" << i << "].zcnt=" << glist[i].zcnt << endl;
-
 		}
-		cout << "current g2 count = " << currg2cnt << endl;
-		for (int i = 1; i <= currg2cnt; i++){
-			cout << "g2list[" << i << "].r=" << g2list[i].r << endl;
-			cout << "g2list[" << i << "].c=" << g2list[i].c << endl;
-			cout << "g2list[" << i << "].v=" << g2list[i].v << endl;
-			cout << "g2list[" << i << "].zcnt=" << g2list[i].zcnt << endl;
-
-		}
-		
 	}
-//	if ((currgcnt == 1) && (currg2cnt == 0)){ insbtable(currgcnt); }
-//	if ((currgcnt == 0) && (currg2cnt == 1)){ insb2table(currg2cnt); }
-
-
 	glerr = false;
-	//glastwrite = "0";
 	int num = 0;
 	zcnt = 0;
 	for (int x = 1; x <= rmax - 1; ++x) {
@@ -2900,11 +2934,8 @@ void rldsaved(){
 			col[y].loc[num] = x;
 			if (num == 0){ zcnt++; }
 		}
-
 	} 
-	
 	updp();	 
-	lzcnt = zcnt;
 	rowunit[1].udone = false;
 	rowunit[2].udone = false;
 	rowunit[3].udone = false;
@@ -2912,35 +2943,16 @@ void rldsaved(){
 	colunit[2].udone = false;
 	colunit[3].udone = false;
 	pdone = false;
-	int A = 0;
-	int B = 0;
-	int yes = 1;
-	 
-	 
-
-
-	 
 	for (int i = 1; i <= currgcnt; i++){ insbtable(i); }
-	for (int i = 1; i <= currg2cnt; i++){ insb2table(i); }
-
-		cleargtable();
-		clearg2table();
-
+	cleargtable();
 	lzcnt = zcnt;
- 
-	//debug = false;
-
 	return;
 }
 //==========================================================
 //end rldsaved
 //==========================================================   
-
-//==========================================================
-//==========================================================   
 //==========================================================   
 //==========================================================
-
 void saveinitialpuzzle(){
 	//==========================================================
 
@@ -2974,8 +2986,6 @@ void printgbtables(){
 		cout << endl;
 	}
 	cout << endl;
-
-	cout << endl;
 	cout << "btable======================" << endl;
 	for (int x = 1; x <= rmax - 1; ++x) {
 		for (int y = 1; y <= cmax - 1; ++y){
@@ -3005,8 +3015,6 @@ void printgbtables(){
 		cout << endl;
 	}
 	cout << endl;
-
-	cout << endl;
 	cout << "b2table======================" << endl;
 	for (int x = 1; x <= rmax - 1; ++x) {
 		for (int y = 1; y <= cmax - 1; ++y){
@@ -3023,16 +3031,7 @@ void printgbtables(){
 	cout << endl;
 	return;
 }
-	
-
- 
- 
-
- 
-
 //==========================================================
-//end checkgtable
-//========================================================== 
 void insbtable(int glindex){
 //==========================================================
 	int r, c, v;
@@ -8390,7 +8389,7 @@ int c3bl(int b){
 	//==========================================================
 	//   //cout<<"in function c3bl box="<<b<<endl;
 	if ((box[b].bcnt == 0) || (box[b].done)){ return 0; }
-	for (int i = 1; i <= 9; ++i){ box[b].hash[i] = 0; }
+//	for (int i = 1; i <= 9; ++i){ box[b].hash[i] = 0; }
 	//                         
 	//readpuzzle();
 //	box[b].bcnt = 0;
@@ -8446,7 +8445,7 @@ int c1bl(int b){
 	//==========================================================
 	//  //cout<<"in function c1bl box="<<b<<endl;
 	if ((box[b].bcnt == 0) || (box[b].done)){ return 0; }
-	for (int i = 1; i <= 9; ++i){ box[b].hash[i] = 0; }
+//	for (int i = 1; i <= 9; ++i){ box[b].hash[i] = 0; }
 	//                         
 	//readpuzzle();
 	//box[b].bcnt = 0;
@@ -9169,42 +9168,21 @@ int inspuzzle(int r, int c, int v){
 	//==========================================================
 	int res = 0;
 	checkfin();
+	if (thisisaguess){
+	//	if (btable[r][c] == v){ return 1; }
+		if ((gtable[r][c] == v) && (zcnt > 30)){ return 1; }
+		if ((btable[r][c] == v) && (zcnt > 30)){ return 1; }
 
- 
-	if (b2table[r][c] >0){
-		if (debug){
-			cout << "******************b2table collision*********" << endl;
-			cout << " *****************row*******(rc = v)********" << r << c << v << endl;
-		}
-		//return 0;
+	//	if (btable[r][c] == v){ return 0; }
+	//	if (gtable[r][c] == v){ return 0; }
+
 	}
-
-	 
-	if (btable[r][c] >0){
-		if (debug){
-			cout << "******************btable collision*********" << endl;
-			cout << " *****************row*******(rc = v)********" << r << c << v << endl;
-		}
-	//	return 0;
-	}
-
-	 
- 	errorcode = checkinsert(r, c, v);
-
-	//This needs to be commented out for non-debug
-
-	if (errorcode>0){
-		
+	errorcode = checkinsert(r, c, v);
+	if (errorcode>0){	
 		glerr = true; res = 0; 
-	  //  rldsaved(); return 0;
-
-		
-
 		if (debug){ 
 			cout << "errorcode=" << errorcode << endl;
 			cout << "rcv=" << r << c << v << endl;
-			
-			 
 				cout << endl;
 				cout << "================puzzle insert successful=============" << endl;
 				cout << "row=" << r << " col=" << c << " value=" << v << endl;
@@ -9212,12 +9190,6 @@ int inspuzzle(int r, int c, int v){
 				cout << "last write from     " << glastwrite << endl;
 				cout << "last write from fnc=" << fnc << endl << endl;
 			}
-		
-		 
-
-
-	
-
 		 
 		switch (errorcode){
 		case noerr:break;
@@ -9231,13 +9203,9 @@ int inspuzzle(int r, int c, int v){
 		case  overwrite://cout<<"error = attempted overwrite"<<endl;      break;
 			break;
 		}
-
-
-
 	}
 	else{
 		if ((puzzle[r][c] == 0) && (puzzle[r][c] != v)){
-		//	debug = true;
 			if (debug == true){
 				cout << endl;
 				cout << "================puzzle insert successful=============" << endl;
@@ -9247,25 +9215,14 @@ int inspuzzle(int r, int c, int v){
 				cout << "last write from fnc=" << fnc << endl << endl;
 	    	}
 			fnc = 0;
-		//	if (puzzle[r][c] == btable[r][c]){//stealth non-write
-		//		glerr = true;
-		//		return 0;
-		//	}
-		//	debug = false;
 			puzzle[r][c] = v;
-
 			errorcode = 0;
-
 			res = v;
-		//	readpuzzle();
-		//	res = 1;
 			updp();
-			 
 		}
 	}
 	if (debug){ cout << "zcnt=" << zcnt << " glerr=" << glerr << endl; }
 	checkfin();
-	 
 	return res;
 }
 //==========================================================
@@ -9274,9 +9231,7 @@ int inspuzzle(int r, int c, int v){
 int checkinsert(int r, int c, int v){
 	//============================================================
 	int  const  noerr = 0;
-
 	errorcode = noerr;
-	 
 	if (glerr){ errorcode = gerr; return errorcode; }
 	if (puzzle[r][c] == v){ return noerr; }
 	int tres = finrow(r, v);
@@ -9294,13 +9249,9 @@ int checkinsert(int r, int c, int v){
 	if (v>9)    { errorcode = badv; }
 	if (v <= 0)   { errorcode = badv; }
 
-
-	//if (gtable[r][c] == v){ if (currgcnt > 1){ errorcode = 69; } }
-
 	if ((errorcode == noerr) && (v != 0)){
 		if (debug == true){ cout << "insert allowed for (r,c,v)=(" << r << c << v << ")" << endl; }
 	}
-
 	if (debug == true){
 		if (errorcode>noerr){
 			cout << "insert not allowed for (r,c,v)=(" << r << c << v << ")" << endl;
@@ -9316,11 +9267,8 @@ int checkinsert(int r, int c, int v){
 			case  overwrite:  cout << "error = attempted overwrite" << endl;      break;
 				break;
 			}
-
 		}
-
 	}
-
 	return errorcode;
 }
 
@@ -9478,25 +9426,18 @@ int _tmain(){ //for windows
 	//debug = true;
 	if (gfirstguess){
 		gfirstguess = false;
-
 		saveinitialpuzzle();
 		r2chinit();
 		c2chinit();
-		
 
-		//	for (int runit = 1; runit <= 3; runit++){ try1try2update(runit); 
-		bool tdebug = debug;
+		
 		if (debug){
 			cout << "*************************************saving this puzzle" << endl;
 			printpuzzle();
-			debug = tdebug;
-
 		}
 	}
 
-	if (!glerr){
-		if ((!glerr) && (zcnt < lzcnt)){ _tmain(); }
-	}
+	if ((!glerr) && (zcnt < lzcnt)){ _tmain(); }
 	int tzcnt = zcnt;
 	oldcurrgcnt = currgcnt;
 	//lzcnt = zcnt;
@@ -9509,71 +9450,62 @@ int _tmain(){ //for windows
 		//guess ever whether a number being inserted is correct. It will always know.
 		//That's why this is the fastest solver on Earth.
 		//	debug = false;
-		if (glerr){ rldsaved(); }
-
-		checkcnts();
-		 
-		
-	
-		int tindex = 1;
-		int inserted = 0;
+		checkcnts();		
 		if (debug){
 			cout << "tzcnt=" << tzcnt << endl;
 			cout << "zcnt=" << zcnt << endl;
-		}
-		for (int unit = 1; unit <= 3; unit++){
-			inserted = 0;
-			inserted = insertr2choices(unit);
-			//insertc2choices(unit);
-			if (inserted){
-				if (glerr){ inserted = 0; rldsaved(); }
-				else{
-					if (inserted > 0){
-						_tmain();
-					}
-				}
-			}
-		}
-		for (int unit = 1; unit <= 3; unit++){
-			inserted = 0;
-			inserted = insertr2choices(unit);
-			//insertc2choices(unit);
-			if (inserted){
-				if (glerr){ inserted = 0; rldsaved(); }
-				else{
-					if (inserted > 0){
-						_tmain();
-					}
-				}
-			}
-		}
-		  
+		} 
+		int inserted = 0;
+		//===========================================
+		tzcnt = zcnt;
+		if ((!glerr) && (zcnt < tzcnt) && (inserted>0)){ thisisaguess = false; _tmain(); }
+		if (glerr){ rldsaved(); inserted = 0; }
 
-		 
-	    inserted = predictpath();
-		if ((!glerr)&&(inserted>0)){ _tmain(); }
-		
-		if (inserted > 0){
-			if (debug){
-				for (int i = 1; i <= currgcnt; i++){
-					cout << "g2list[" << i << "].r=" << g2list[i].r << endl;
-					cout << "g2list[" << i << "].c=" << g2list[i].c << endl;
-					cout << "g2list[" << i << "].v=" << g2list[i].v << endl;
-					cout << "g2list[" << i << "].zcnt=" << g2list[i].zcnt << endl;
-				}
-			}
-			if (debug){
-				for (int i = 1; i <= currgcnt; i++){
-					cout << "glist[" << i << "].r=" << glist[i].r << endl;
-					cout << "glist[" << i << "].c=" << glist[i].c << endl;
-					cout << "glist[" << i << "].v=" << glist[i].v << endl;
-					cout << "glist[" << i << "].zcnt=" << glist[i].zcnt << endl;
 
-				}
-			}
+
+		thisisaguess = true;
+		inserted = pickrand2();
+		if ((!glerr) && (zcnt < tzcnt) && (inserted>0)){ thisisaguess = false; _tmain(); }
+		if (glerr){ rldsaved(); inserted = 0; }
+		//==============================================
+		if (gunit == 0){ gunit = 1; }
+		if (gunit > 3){ gunit = 1; }
+		for (int unit = gunit; unit <= 3; unit++){
+			thisisaguess = true;
+			tzcnt = zcnt;
+			inserted = insertr2choices(unit);
+			if ((!glerr) && (zcnt < tzcnt) && (inserted>0)){ thisisaguess = false; _tmain(); }
+			if (glerr){ rldsaved(); }
+			inserted = 0;
+			gunit++;
 		}
-		if (glerr){ rldsaved(); }	 
-	 
+		//=================================================
+		thisisaguess = true;
+		tzcnt = zcnt;
+		inserted = pickrand2();
+		if ((!glerr) && (zcnt < tzcnt) && (inserted>0)){ thisisaguess = false; _tmain(); }
+		if (glerr){ rldsaved(); inserted = 0; }
+	
+		//==========================================
+		tzcnt = zcnt;
+		thisisaguess = true;
+		inserted = pickrandunbounded();
+		if ((!glerr) && (zcnt < tzcnt) && (inserted>0)){ thisisaguess = false; _tmain(); }
+		if (glerr){ rldsaved(); inserted = 0; }		
+		//==========================================
+		tzcnt = zcnt;
+		thisisaguess = true;
+		inserted = pickrand2();
+		if ((!glerr) && (zcnt < tzcnt) && (inserted>0)){ thisisaguess = false; _tmain(); }
+		if (glerr){ rldsaved(); inserted = 0; }
+		//=========================================
+		tzcnt = zcnt;
+		thisisaguess = true;
+		inserted = predictpath();
+		if ((!glerr) && (zcnt < tzcnt) && (inserted>0)){ thisisaguess = false; _tmain(); }
+		if (glerr){ rldsaved(); inserted = 0; }
+		checkfin();
+	
 	}
 	return 0;
 }
@@ -9595,8 +9527,330 @@ void gproccolunit(int cunit){
 		 
 	return;
 }
+//===============================================================
+int pickrand2(){
 
 
+	mt19937_64 generator(gseed);  // mt19937_64 is a standard 64 bit mersenne_twister_engine
+
+	int mcntrow = 9;
+	int mcntcol = 9;
+	int mcntbox = 9;
+	int inserted = 0;
+	int index = 1;
+	for (int i = 1; i <= 9; i++){
+		mcntrow = gm(zrow, i);
+		if ((mcntrow > 0) && (mcntrow <= 2)){
+			index = i;
+			break;
+		}
+		mcntcol = gm(zcol, i);
+		if ((mcntcol > 0) && (mcntcol <= 2)){
+			index = i;
+			break;
+		}
+		mcntbox = gm(zbox, i);
+		if ((mcntbox > 0) && (mcntbox <= 2)){
+			index = i;
+			break;
+		}
+	}
+	//========================================================================================================
+	if ((mcntrow > 0) && (mcntrow <= 2)){
+		gbls(zrow, index);
+		int randm = generator() % mcntrow + 1;
+		int randbl = generator() % mcntrow + 1;
+		int bl = blrow[randbl];
+		int value = mrow[randm];
+		int inrow = finrow(index, value);
+		int incol = fincol(bl, value);
+		if ((!incol) && (!inrow)){
+			glastwrite = "***********************pickrand2 row*******A********************";
+			inserted = inspuzzle(index, bl, value);
+			if (inserted > 0){
+				insgtable(index, bl, value);
+				return inserted;
+			}
+		}
+		if (bl == blrow[1]){bl = blrow[2];}
+		else{bl = blrow[1];}
+		inrow = finrow(index, value);
+		incol = fincol(bl, value);
+		if ((!incol) && (!inrow)){
+			glastwrite = "***********************pickrand2 row*********B******************";
+			inserted = inspuzzle(index, bl, value);
+			if (inserted > 0){ insgtable(index, bl, value); }
+			return inserted;
+		}
+		if (value == mrow[1]){ value = mrow[2]; }
+		else{value = mrow[1];}
+		inrow = finrow(index, value);
+		incol = fincol(bl, value);
+		if ((!incol) && (!inrow)){
+			glastwrite = "***********************pickrand2 row*******C********************";
+			inserted = inspuzzle(index, bl, value);
+			if (inserted > 0){ insgtable(index, bl, value); }
+			return inserted;
+		}
+		if (bl == blrow[1]){bl = blrow[2];}
+		else{bl = blrow[1];}
+		inrow = finrow(index, value);
+		incol = fincol(bl, value);
+		if ((!incol) && (!inrow)){
+			glastwrite = "***********************pickrand2 row*********D******************";
+			inserted = inspuzzle(index, bl, value);
+			if (inserted > 0){ insgtable(index, bl, value); }
+			return inserted;
+		}
+		clearbtable();
+	//	cleargtable();
+		rldsaved();
+		return 0;
+	}
+	//=======================================================================================================
+	if ((mcntcol > 0) && (mcntcol <= 2)){
+		gbls(zcol, index);
+		int randm = generator() % mcntcol + 1;
+		int randbl = generator() % mcntcol + 1;
+		int bl = blcol[randbl];
+		int value = mcol[randm];
+		int inrow = finrow(index, value);
+		int tbox = gboxfromrowandcol(bl, index);
+		int inbox = finbox(tbox, value);       //or box
+		if ((!inrow) && (!inbox)){
+			glastwrite = "***********************pickrand2 col**********A*****************";
+			inserted = inspuzzle(bl, index, value);
+			if (inserted > 0){ insgtable(bl, index, value); }
+			return inserted;
+		}
+		if (bl == blcol[1]){
+			bl = blcol[2];
+		}
+		else{
+			bl = blcol[1];
+		}
+		tbox = gboxfromrowandcol(bl, index);
+		inbox = finbox(tbox, value);       //or box
+		inrow = finrow(index, value);
+		if ((!inrow) && (!inbox)){
+			glastwrite = "***********************pickrand2 col**********B****************";
+			inserted = inspuzzle(bl, index, value);
+			if (inserted > 0){ insgtable(bl, index, value); }
+			return inserted;
+		}
+		if (value == mcol[1]){
+			value = mcol[2];
+		}
+		else{
+			value = mcol[1];
+		}
+		inrow = finrow(index, value);
+		tbox = gboxfromrowandcol(bl, index);
+		inbox = finbox(tbox, value);       //or box
+		if ((!inrow) && (!inbox)){
+			glastwrite = "***********************pickrand2 col**********C*****************";
+			inserted = inspuzzle(bl, index, value);
+			if (inserted > 0){ insgtable(bl, index, value); }
+			return inserted;
+		}
+		if (bl == blcol[1]){
+			bl = blcol[2];
+		}
+		else{
+			bl = blcol[1];
+		}
+		tbox = gboxfromrowandcol(bl, index);
+		inbox = finbox(tbox, value);       //or box
+		inrow = finrow(index, value);
+		if ((!inrow) && (!inbox)){
+			glastwrite = "***********************pickrand2 col**********D****************";
+			inserted = inspuzzle(bl, index, value);
+			if (inserted > 0){ insgtable(bl, index, value); }
+			return inserted;
+		}
+      	clearbtable();
+	//cleargtable();
+		rldsaved();
+		return 0;
+	}
+	//=======================================================================================================
+	if ((mcntbox > 0) && (mcntbox <= 2)){
+		gbls(zbox, index);
+		int randm = generator() % mcntbox + 1;
+		int randbl = generator() % mcntbox + 1;
+		int bl = blbox[randbl];
+		int value = mbox[randm];
+		int trow = growfromboxandpos(index, bl);
+		int tcol = gcolfromboxandpos(index, bl);
+		int inbox = finbox(index, value);
+		if (!inbox){
+			glastwrite = "***********************pickrand2 box************A***************";
+			inserted = inspuzzle(trow, tcol, value);
+			if (inserted > 0){ insgtable(trow, tcol, value); }
+			return inserted;
+		}
+		if (bl == blbox[1]){
+			bl = blbox[2];
+		}
+		else{
+			bl = blbox[1];
+		}
+		trow = growfromboxandpos(index, bl);
+		tcol = gcolfromboxandpos(index, bl);
+		inbox = finbox(index, value);
+		if (!inbox){
+			glastwrite = "***********************pickrand2 box***********B**************";
+			inserted = inspuzzle(trow, tcol, value);
+			if (inserted > 0){ insgtable(trow, tcol, value); }
+			return inserted;
+		}
+		if (value == mbox[1]){
+			value = mbox[2];
+		}
+		else{
+			value = mbox[1];
+		}
+		 trow = growfromboxandpos(index, bl);
+		 tcol = gcolfromboxandpos(index, bl);
+		 inbox = finbox(index, value);
+		if (!inbox){
+			glastwrite = "***********************pickrand2 box************C***************";
+			inserted = inspuzzle(trow, tcol, value);
+			if (inserted > 0){ insgtable(trow, tcol, value); }
+		    return inserted;
+		}
+		if (bl == blbox[1]){
+			bl = blbox[2];
+		}
+		else{
+			bl = blbox[1];
+
+		}
+		trow = growfromboxandpos(index, bl);
+		tcol = gcolfromboxandpos(index, bl);
+		inbox = finbox(index, value);
+		if (!inbox){
+			glastwrite = "***********************pickrand2 box***********D**************";
+			inserted = inspuzzle(trow, tcol, value);
+			if (inserted > 0){ insgtable(trow, tcol, value); }
+			return inserted;
+		}
+		//==================================================================================================
+		//if (!inserted){ rldsaved(); return 0; }
+		clearbtable();
+	//	cleargtable();
+		rldsaved();
+		return 0;
+	}
+	//=======================================================================================================
+	return 0;
+}
+
+//=========================================================================================
+int pickrandunbounded(){
+	mt19937_64 generator(gseed);  // mt19937_64 is a standard 64 bit mersenne_twister_engine
+	int mcntrow = 0;
+	int mcntcol = 0;
+	int mcntbox = 0;
+	int inserted = 0;
+	int rowindex = 0;
+	int colindex = 0;
+	int boxindex = 0;
+	int lowestmcntrow = 9;
+	int lowestmcntcol = 9;
+	int lowestmcntbox = 9;
+	int lowindex = 9;
+	for (int i = 1; i <= 9; i++){
+		mcntcol = gm(zcol, i);
+		if ((mcntcol < lowestmcntcol) && (mcntcol>0)){
+			if (debug){ cout << "mcntcol=" << mcntcol << endl; }
+			lowestmcntcol = mcntcol;
+			colindex = i;
+		}
+	}
+	for (int i = 1; i <= 9; i++){
+		mcntbox = gm(zbox, i);
+		gbls(zbox, i);
+		if (debug){ cout << "mcntbox=" << mcntbox << endl; }
+		if ((mcntbox < lowestmcntbox) && (mcntbox>0)){
+			lowestmcntbox = mcntbox;
+			boxindex = i;
+		}
+	}
+	for (int i = 1; i <= 9; i++){
+		mcntrow = gm(zrow, i);
+		if ((mcntrow < lowestmcntrow) && (mcntrow>0)){
+			lowestmcntrow = mcntrow;
+			rowindex = i;
+		}
+	}
+	int lowestmcnt = 9;
+	int which = zrow;
+	if (lowestmcntrow < lowestmcnt){ lowestmcnt = lowestmcntrow; which = zrow; lowindex = rowindex; }
+	if (lowestmcntcol < lowestmcnt){ lowestmcnt = lowestmcntcol; which = zcol; lowindex = colindex; }
+	if (lowestmcntbox < lowestmcnt){ lowestmcnt = lowestmcntbox; which = zbox; lowindex = boxindex; }
+	gbls(which, lowindex);
+	int randm = generator() % lowestmcnt + 1;
+	int randbl = generator() % lowestmcnt + 1;
+	if (which == zcol){
+		int bl = blcol[randbl];
+		int value = mcol[randm];
+		int inrow = finrow(bl, value);
+		int incol = fincol(lowindex, value);
+		int tbox = gboxfromrowandcol(bl, lowindex);
+		int inbox = finbox(tbox, value);    
+		if ((!inrow)&&(!inbox)&&(!incol)){
+			glastwrite = "***********************pickrandunbounded col***************************";
+			inserted = inspuzzle(bl, lowindex, value);
+			if (inserted > 0){insgtable(bl, lowindex, value); }
+			return inserted;
+		}
+		which = zbox;
+		lowindex = boxindex;
+		lowestmcnt = lowestmcntbox;
+		int randm = generator() % lowestmcnt + 1;
+		int randbl = generator() % lowestmcnt + 1;
+		gbls(which, lowindex);
+	}
+	if (which == zbox){
+		int bl = blbox[randbl];
+		int value = mbox[randm];
+		int trow = growfromboxandpos(lowindex, bl); 
+		int tcol = gcolfromboxandpos(lowindex, bl);
+		int inbox = finbox(lowindex, value);
+		int inrow = finrow(trow, value);
+		int incol = fincol(tcol, value);
+		if ((!inbox)&&(!inrow)&&(!incol)){
+			glastwrite = "***********************pickrandunbounded box***************************";
+			inserted = inspuzzle(trow, tcol, value);
+			if (inserted > 0){ insgtable(trow, tcol, value); }
+			return inserted;
+		}
+		which = zrow;
+		lowindex = rowindex;
+		lowestmcnt = lowestmcntrow;
+		int randm = generator() % lowestmcnt + 1;
+		int randbl = generator() % lowestmcnt + 1;
+		gbls(which, lowindex);
+	}
+	if (which == zrow){
+		int bl = blrow[randbl];
+		int value = mrow[randm];
+		int inrow = finrow(lowindex, value);
+		int tcol = fincol(bl, value);
+		if ((!incol) && (!inrow)){
+			glastwrite = "***********************pickrandunbounded row***************************";
+			inserted = inspuzzle(lowindex, bl, value);
+			if (inserted > 0){ insgtable(lowindex, bl, value); }
+			return inserted;
+		}
+	}
+	if (glerr){ rldsaved(); }
+	clearbtable();
+   cleargtable();
+	return 0;
+}
+//===============================================================================================
 
 //=====================
 //=====================
@@ -9643,15 +9897,11 @@ int predictpath(){
 			int res = 0;
 
 			if ((inrow == 0) && (incol == 0) && (inbox == 0) && (!glerr)){   //looks clean, go ahead and insert;
-				//	if ((g2table[gindex][col] == 0) && (b2table[gindex][col] == 0) && (gtable[gindex][col] == 0) && (btable[gindex][col] == 0)){
-				//	if ((g2table[gindex][col] == 0) && (gtable[gindex][col] == 0)){
-
-
+			
 				glastwrite = "***********************predictpath";
 
 				int gres = inspuzzle(gindex, col, value);  //insert the valid but possibly incorrect value.
-				//		insg2table(gindex, col, value);
-				glerr = false;
+				if (gres > 0){ insgtable(gindex, col, value); }
 				return gres;
 
 			}
@@ -9660,11 +9910,8 @@ int predictpath(){
 	}
 	return 0;
 }
-
-
  //end predictpath
-
-//=====================
+//==============================================================================================================
 
 //===================================================
 //==========================================================    	
